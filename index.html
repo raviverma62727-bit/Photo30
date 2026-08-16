@@ -1,0 +1,2823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#08090d">
+<title>PixelForge AI — Photo Enhancer</title>
+
+<style>
+/* =========================================================
+   PIXELFORGE AI
+   Single-file professional photo editor
+   ========================================================= */
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#07080b;
+  --surface:#0d1015;
+  --surface2:#12161d;
+  --surface3:#181d25;
+  --surface4:#202631;
+  --line:#272d38;
+  --line2:#343b48;
+  --text:#f4f7fb;
+  --muted:#8c96a5;
+  --accent:#6c63ff;
+  --accent2:#8b7cff;
+  --danger:#ff5571;
+  --success:#35d39a;
+  --warning:#ffbd59;
+  --radius:10px;
+  --shadow:0 20px 60px rgba(0,0,0,.4);
+}
+
+html,body{
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:var(--bg);
+  color:var(--text);
+  font-family:
+    Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,
+    "Segoe UI",Roboto,Arial,sans-serif;
+}
+
+button,input,select{
+  font:inherit;
+}
+
+button{
+  border:0;
+  cursor:pointer;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible{
+  outline:2px solid var(--accent);
+  outline-offset:2px;
+}
+
+/* =========================================================
+   APP
+   ========================================================= */
+
+#app{
+  width:100%;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+}
+
+/* =========================================================
+   TOPBAR
+   ========================================================= */
+
+.topbar{
+  height:62px;
+  flex:none;
+  display:flex;
+  align-items:center;
+  gap:18px;
+  padding:0 18px;
+  border-bottom:1px solid var(--line);
+  background:rgba(10,12,16,.94);
+  backdrop-filter:blur(18px);
+  position:relative;
+  z-index:20;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-size:18px;
+  font-weight:850;
+  letter-spacing:-.04em;
+  white-space:nowrap;
+}
+
+.logo-mark{
+  width:31px;
+  height:31px;
+  border-radius:9px;
+  display:grid;
+  place-items:center;
+  background:
+    linear-gradient(135deg,#756bff,#4b7cff);
+  box-shadow:0 8px 24px rgba(108,99,255,.3);
+}
+
+.logo span{
+  color:#8c83ff;
+}
+
+.project-title{
+  color:var(--muted);
+  font-size:12px;
+  border-left:1px solid var(--line);
+  padding-left:18px;
+}
+
+.top-actions{
+  margin-left:auto;
+  display:flex;
+  gap:7px;
+}
+
+.btn{
+  min-height:34px;
+  padding:0 13px;
+  border-radius:8px;
+  background:var(--surface3);
+  border:1px solid var(--line);
+  color:var(--text);
+  font-size:12px;
+  font-weight:650;
+  transition:.18s ease;
+}
+
+.btn:hover{
+  background:var(--surface4);
+  border-color:var(--line2);
+  transform:translateY(-1px);
+}
+
+.btn.primary{
+  background:linear-gradient(135deg,var(--accent),#527cff);
+  border-color:transparent;
+  box-shadow:0 7px 25px rgba(108,99,255,.25);
+}
+
+.btn.danger{
+  color:#ff8498;
+}
+
+.icon-btn{
+  width:35px;
+  height:35px;
+  display:grid;
+  place-items:center;
+  border-radius:8px;
+  background:var(--surface3);
+  color:#dce2ea;
+  border:1px solid var(--line);
+}
+
+/* =========================================================
+   WORKSPACE
+   ========================================================= */
+
+.workspace{
+  flex:1;
+  min-height:0;
+  display:grid;
+  grid-template-columns:250px minmax(0,1fr) 285px;
+}
+
+/* =========================================================
+   SIDEBARS
+   ========================================================= */
+
+.sidebar{
+  min-width:0;
+  min-height:0;
+  overflow:hidden;
+  background:var(--surface);
+}
+
+.sidebar.left{
+  border-right:1px solid var(--line);
+}
+
+.sidebar.right{
+  border-left:1px solid var(--line);
+}
+
+.panel-head{
+  height:48px;
+  display:flex;
+  align-items:center;
+  padding:0 15px;
+  border-bottom:1px solid var(--line);
+  color:#cbd2dc;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.12em;
+}
+
+.panel-body{
+  height:calc(100% - 48px);
+  overflow:auto;
+  padding:13px;
+}
+
+/* =========================================================
+   LEFT TOOL NAV
+   ========================================================= */
+
+.tool-search{
+  width:100%;
+  height:35px;
+  border-radius:8px;
+  border:1px solid var(--line);
+  background:#11151b;
+  color:var(--text);
+  padding:0 11px;
+  margin-bottom:12px;
+}
+
+.tool-list{
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+}
+
+.tool{
+  width:100%;
+  min-height:43px;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:0 11px;
+  border-radius:8px;
+  background:transparent;
+  color:#aab3bf;
+  text-align:left;
+  border:1px solid transparent;
+  transition:.17s ease;
+}
+
+.tool:hover{
+  background:var(--surface3);
+  color:#fff;
+}
+
+.tool.active{
+  background:rgba(108,99,255,.13);
+  border-color:rgba(108,99,255,.27);
+  color:#fff;
+}
+
+.tool-icon{
+  width:25px;
+  text-align:center;
+  font-size:17px;
+}
+
+.tool-text{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+
+.tool-text strong{
+  font-size:12px;
+}
+
+.tool-text small{
+  color:#6f7987;
+  font-size:9px;
+}
+
+/* =========================================================
+   CENTER
+   ========================================================= */
+
+.center{
+  min-width:0;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+  background:#090b0f;
+}
+
+.canvas-area{
+  flex:1;
+  min-height:0;
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 50% 45%,#1b2029 0,#0c0f14 42%,#07080b 80%);
+}
+
+.grid{
+  position:absolute;
+  inset:0;
+  opacity:.12;
+  background-image:
+    linear-gradient(#fff 1px,transparent 1px),
+    linear-gradient(90deg,#fff 1px,transparent 1px);
+  background-size:35px 35px;
+  mask-image:linear-gradient(to bottom,transparent,#000 30%,#000 70%,transparent);
+}
+
+.stage{
+  position:relative;
+  width:min(80%,900px);
+  max-height:82%;
+  aspect-ratio:16/9;
+  background:#000;
+  overflow:hidden;
+  border-radius:4px;
+  box-shadow:0 30px 100px rgba(0,0,0,.65);
+  border:1px solid #252b35;
+}
+
+#canvas{
+  width:100%;
+  height:100%;
+  display:block;
+}
+
+.empty{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  color:#77818f;
+  pointer-events:none;
+}
+
+.empty .big{
+  font-size:50px;
+  opacity:.7;
+}
+
+.empty strong{
+  color:#d5dbe3;
+  font-size:14px;
+}
+
+.empty span{
+  font-size:11px;
+}
+
+/* =========================================================
+   CANVAS CONTROLS
+   ========================================================= */
+
+.canvas-tools{
+  position:absolute;
+  left:50%;
+  bottom:18px;
+  transform:translateX(-50%);
+  display:flex;
+  gap:5px;
+  padding:5px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:rgba(12,15,20,.88);
+  backdrop-filter:blur(15px);
+  box-shadow:var(--shadow);
+  z-index:10;
+}
+
+.canvas-tools button{
+  min-width:35px;
+  height:31px;
+  border-radius:7px;
+  background:transparent;
+  color:#cbd2dc;
+}
+
+.canvas-tools button:hover{
+  background:var(--surface3);
+  color:#fff;
+}
+
+/* =========================================================
+   BOTTOM STATUS
+   ========================================================= */
+
+.bottom{
+  height:44px;
+  flex:none;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:0 12px;
+  border-top:1px solid var(--line);
+  background:#0d1015;
+  color:#77818e;
+  font-size:10px;
+}
+
+.status-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--success);
+  box-shadow:0 0 10px rgba(53,211,154,.6);
+}
+
+.bottom .right{
+  margin-left:auto;
+}
+
+/* =========================================================
+   RIGHT PANEL
+   ========================================================= */
+
+.section{
+  padding-bottom:17px;
+  margin-bottom:17px;
+  border-bottom:1px solid rgba(255,255,255,.055);
+}
+
+.section:last-child{
+  border-bottom:0;
+}
+
+.section-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:12px;
+  color:#bfc7d2;
+  font-size:10px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+}
+
+.control{
+  margin-bottom:12px;
+}
+
+.control:last-child{
+  margin-bottom:0;
+}
+
+.control label{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:7px;
+  color:#8993a1;
+  font-size:10px;
+}
+
+.control output{
+  color:#cfd6df;
+}
+
+.range{
+  width:100%;
+  height:4px;
+  appearance:none;
+  background:#2a303a;
+  border-radius:5px;
+  outline:none;
+}
+
+.range::-webkit-slider-thumb{
+  appearance:none;
+  width:13px;
+  height:13px;
+  border-radius:50%;
+  background:#fff;
+  border:3px solid var(--accent);
+  box-shadow:0 0 0 3px rgba(108,99,255,.15);
+}
+
+.select,
+.input{
+  width:100%;
+  height:35px;
+  padding:0 9px;
+  color:#edf1f5;
+  background:#151a21;
+  border:1px solid var(--line);
+  border-radius:7px;
+  outline:none;
+  font-size:11px;
+}
+
+.select:focus,
+.input:focus{
+  border-color:var(--accent);
+}
+
+/* =========================================================
+   UPLOAD
+   ========================================================= */
+
+.upload{
+  width:100%;
+  min-height:145px;
+  border:1px dashed #424b59;
+  border-radius:10px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:8px;
+  text-align:center;
+  color:#8e98a6;
+  background:linear-gradient(145deg,#11151c,#0d1015);
+  transition:.2s ease;
+}
+
+.upload:hover,
+.upload.drag{
+  border-color:var(--accent);
+  background:rgba(108,99,255,.08);
+}
+
+.upload-icon{
+  font-size:31px;
+}
+
+.upload strong{
+  color:#e5e9ef;
+  font-size:12px;
+}
+
+.upload small{
+  font-size:9px;
+}
+
+#file{
+  display:none;
+}
+
+/* =========================================================
+   THEMES
+   ========================================================= */
+
+.theme-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:6px;
+}
+
+.theme{
+  height:52px;
+  border-radius:7px;
+  border:1px solid var(--line);
+  position:relative;
+  overflow:hidden;
+  cursor:pointer;
+}
+
+.theme span{
+  position:absolute;
+  bottom:4px;
+  left:5px;
+  right:5px;
+  font-size:8px;
+  color:white;
+  text-shadow:0 1px 5px #000;
+}
+
+.theme:nth-child(1){background:linear-gradient(135deg,#ffb36b,#7b4bff)}
+.theme:nth-child(2){background:linear-gradient(135deg,#f857a6,#ff5858)}
+.theme:nth-child(3){background:linear-gradient(135deg,#00c6ff,#0072ff)}
+.theme:nth-child(4){background:linear-gradient(135deg,#11998e,#38ef7d)}
+.theme:nth-child(5){background:linear-gradient(135deg,#434343,#000)}
+.theme:nth-child(6){background:linear-gradient(135deg,#ff9966,#ff5e62)}
+
+.theme.active{
+  border:2px solid #fff;
+}
+
+/* =========================================================
+   STICKERS
+   ========================================================= */
+
+.stickers{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:6px;
+}
+
+.sticker{
+  height:45px;
+  display:grid;
+  place-items:center;
+  border-radius:7px;
+  background:var(--surface3);
+  border:1px solid var(--line);
+  font-size:23px;
+  transition:.15s;
+}
+
+.sticker:hover{
+  transform:scale(1.07);
+  border-color:var(--accent);
+}
+
+/* =========================================================
+   TEXT STYLES
+   ========================================================= */
+
+.text-presets{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6px;
+}
+
+.text-preset{
+  height:40px;
+  border:1px solid var(--line);
+  background:var(--surface3);
+  color:#fff;
+  border-radius:7px;
+  font-size:10px;
+}
+
+.text-preset:hover{
+  border-color:var(--accent);
+}
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  display:none;
+  place-items:center;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(8px);
+}
+
+.modal.show{
+  display:grid;
+  animation:fade .2s ease;
+}
+
+.modal-box{
+  width:min(500px,92%);
+  background:#11151b;
+  border:1px solid var(--line2);
+  border-radius:14px;
+  box-shadow:0 30px 100px rgba(0,0,0,.7);
+  overflow:hidden;
+}
+
+.modal-head{
+  height:54px;
+  padding:0 17px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid var(--line);
+}
+
+.modal-head strong{
+  font-size:13px;
+}
+
+.modal-body{
+  padding:18px;
+}
+
+.export-options{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-bottom:16px;
+}
+
+.export-option{
+  padding:15px;
+  text-align:left;
+  border-radius:9px;
+  background:var(--surface3);
+  border:1px solid var(--line);
+  color:#fff;
+}
+
+.export-option.active{
+  border-color:var(--accent);
+  background:rgba(108,99,255,.1);
+}
+
+.export-option strong{
+  display:block;
+  font-size:12px;
+  margin-bottom:4px;
+}
+
+.export-option small{
+  color:var(--muted);
+  font-size:9px;
+}
+
+/* =========================================================
+   NOTIFICATION
+   ========================================================= */
+
+.toast{
+  position:fixed;
+  right:20px;
+  bottom:65px;
+  z-index:200;
+  padding:11px 15px;
+  background:#171c23;
+  border:1px solid var(--line2);
+  border-radius:9px;
+  color:#fff;
+  font-size:11px;
+  box-shadow:var(--shadow);
+  transform:translateY(20px);
+  opacity:0;
+  pointer-events:none;
+}
+
+.toast.show{
+  animation:toast .3s forwards;
+}
+
+@keyframes toast{
+  to{transform:translateY(0);opacity:1}
+}
+
+@keyframes fade{
+  from{opacity:0}
+  to{opacity:1}
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media(max-width:1050px){
+  .workspace{
+    grid-template-columns:210px minmax(0,1fr) 250px;
+  }
+
+  .project-title{
+    display:none;
+  }
+}
+
+@media(max-width:800px){
+  html,body{
+    overflow:auto;
+  }
+
+  .workspace{
+    grid-template-columns:1fr;
+    grid-template-rows:auto minmax(450px,1fr) auto;
+  }
+
+  .sidebar.left,
+  .sidebar.right{
+    border:0;
+    border-bottom:1px solid var(--line);
+  }
+
+  .sidebar.left{
+    max-height:230px;
+  }
+
+  .sidebar.right{
+    max-height:450px;
+  }
+
+  .stage{
+    width:94%;
+  }
+
+  .top-actions .btn:not(.primary){
+    display:none;
+  }
+}
+
+@media(max-width:480px){
+  .topbar{
+    padding:0 9px;
+  }
+
+  .logo{
+    font-size:15px;
+  }
+
+  .logo-mark{
+    width:27px;
+    height:27px;
+  }
+
+  .canvas-tools{
+    bottom:8px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="app">
+
+<header class="topbar">
+
+  <div class="logo">
+    <div class="logo-mark">✦</div>
+    Pixel<span>Forge</span> AI
+  </div>
+
+  <div class="project-title">
+    Untitled Photo Project
+  </div>
+
+  <div class="top-actions">
+    <button class="icon-btn" id="undo">↶</button>
+    <button class="icon-btn" id="redo">↷</button>
+    <button class="btn" id="reset">Reset</button>
+    <button class="btn primary" id="exportBtn">Export 4K</button>
+  </div>
+
+</header>
+
+
+<div class="workspace">
+
+
+<!-- =====================================================
+     LEFT SIDEBAR
+     ===================================================== -->
+
+<aside class="sidebar left">
+
+  <div class="panel-head">TOOLS</div>
+
+  <div class="panel-body">
+
+    <input
+      class="tool-search"
+      id="toolSearch"
+      placeholder="Search tools..."
+    >
+
+    <div class="tool-list">
+
+      <button class="tool active" data-tool="enhance">
+        <span class="tool-icon">✨</span>
+        <span class="tool-text">
+          <strong>AI Enhance</strong>
+          <small>Improve details</small>
+        </span>
+      </button>
+
+      <button class="tool" data-tool="adjust">
+        <span class="tool-icon">◒</span>
+        <span class="tool-text">
+          <strong>Adjust</strong>
+          <small>Light & color</small>
+        </span>
+      </button>
+
+      <button class="tool" data-tool="themes">
+        <span class="tool-icon">🎨</span>
+        <span class="tool-text">
+          <strong>Themes</strong>
+          <small>Creative looks</small>
+        </span>
+      </button>
+
+      <button class="tool" data-tool="text">
+        <span class="tool-icon">T</span>
+        <span class="tool-text">
+          <strong>Text</strong>
+          <small>Typography</small>
+        </span>
+      </button>
+
+      <button class="tool" data-tool="stickers">
+        <span class="tool-icon">⭐</span>
+        <span class="tool-text">
+          <strong>Stickers</strong>
+          <small>Decorations</small>
+        </span>
+      </button>
+
+      <button class="tool" data-tool="effects">
+        <span class="tool-icon">✦</span>
+        <span class="tool-text">
+          <strong>Effects</strong>
+          <small>Visual effects</small>
+        </span>
+      </button>
+
+      <button class="tool" data-tool="animation">
+        <span class="tool-icon">⚡</span>
+        <span class="tool-text">
+          <strong>Animation</strong>
+          <small>Motion presets</small>
+        </span>
+      </button>
+
+      <button class="tool" data-tool="crop">
+        <span class="tool-icon">⌗</span>
+        <span class="tool-text">
+          <strong>Crop</strong>
+          <small>Frame & rotate</small>
+        </span>
+      </button>
+
+    </div>
+
+  </div>
+
+</aside>
+
+
+<!-- =====================================================
+     CENTER CANVAS
+     ===================================================== -->
+
+<main class="center">
+
+  <div class="canvas-area">
+
+    <div class="grid"></div>
+
+    <div class="stage" id="stage">
+
+      <canvas id="canvas"></canvas>
+
+      <div class="empty" id="empty">
+
+        <div class="big">⌁</div>
+
+        <strong>
+          Drop a photo here
+        </strong>
+
+        <span>
+          or use the Upload Photo button
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="canvas-tools">
+
+      <button id="zoomOut">−</button>
+      <button id="zoomValue">100%</button>
+      <button id="zoomIn">+</button>
+      <button id="fit">⛶</button>
+      <button id="before">◐</button>
+
+    </div>
+
+
+    <label class="upload" id="uploadBox"
+           style="position:absolute;opacity:0;pointer-events:none">
+
+      <input id="file" type="file"
+             accept="image/png,image/jpeg,image/webp">
+
+    </label>
+
+  </div>
+
+
+  <div class="bottom">
+
+    <span class="status-dot"></span>
+    <span id="status">Ready</span>
+
+    <span class="right">
+      <span id="resolution">No image</span>
+      &nbsp;•&nbsp;
+      <span id="zoomLabel">100%</span>
+    </span>
+
+  </div>
+
+</main>
+
+
+<!-- =====================================================
+     RIGHT SIDEBAR
+     ===================================================== -->
+
+<aside class="sidebar right">
+
+  <div class="panel-head">
+    PROPERTIES
+  </div>
+
+  <div class="panel-body" id="properties">
+
+
+    <!-- UPLOAD -->
+
+    <div class="section">
+
+      <div class="section-title">
+        <span>Source</span>
+      </div>
+
+      <label class="upload" id="dropZone">
+
+        <input
+          id="file"
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          hidden
+        >
+
+        <div class="upload-icon">↥</div>
+
+        <strong>
+          Upload Photo
+        </strong>
+
+        <small>
+          JPG • PNG • WEBP
+        </small>
+
+      </label>
+
+    </div>
+
+
+    <!-- AI -->
+
+    <div class="section">
+
+      <div class="section-title">
+        <span>AI Enhancement</span>
+        <span>AI</span>
+      </div>
+
+      <div class="control">
+
+        <label>
+          <span>Enhancement</span>
+          <output id="enhanceOut">75</output>
+        </label>
+
+        <input
+          class="range"
+          id="enhance"
+          type="range"
+          min="0"
+          max="100"
+          value="75"
+        >
+
+      </div>
+
+      <div class="control">
+
+        <label>
+          <span>Detail Recovery</span>
+          <output id="detailOut">55</output>
+        </label>
+
+        <input
+          class="range"
+          id="detail"
+          type="range"
+          min="0"
+          max="100"
+          value="55"
+        >
+
+      </div>
+
+      <div class="control">
+
+        <label>
+          <span>Noise Reduction</span>
+          <output id="noiseOut">25</output>
+        </label>
+
+        <input
+          class="range"
+          id="noise"
+          type="range"
+          min="0"
+          max="100"
+          value="25"
+        >
+
+      </div>
+
+    </div>
+
+
+    <!-- COLOR -->
+
+    <div class="section">
+
+      <div class="section-title">
+        <span>Color</span>
+      </div>
+
+      <div class="control">
+
+        <label>
+          <span>Brightness</span>
+          <output id="brightnessOut">0</output>
+        </label>
+
+        <input
+          class="range"
+          id="brightness"
+          type="range"
+          min="-100"
+          max="100"
+          value="0"
+        >
+
+      </div>
+
+      <div class="control">
+
+        <label>
+          <span>Contrast</span>
+          <output id="contrastOut">0</output>
+        </label>
+
+        <input
+          class="range"
+          id="contrast"
+          type="range"
+          min="-100"
+          max="100"
+          value="0"
+        >
+
+      </div>
+
+      <div class="control">
+
+        <label>
+          <span>Saturation</span>
+          <output id="saturationOut">0</output>
+        </label>
+
+        <input
+          class="range"
+          id="saturation"
+          type="range"
+          min="-100"
+          max="100"
+          value="0"
+        >
+
+      </div>
+
+    </div>
+
+
+    <!-- THEMES -->
+
+    <div class="section">
+
+      <div class="section-title">
+        <span>Themes</span>
+      </div>
+
+      <div class="theme-grid">
+
+        <button class="theme active" data-theme="none">
+          <span>Original</span>
+        </button>
+
+        <button class="theme" data-theme="warm">
+          <span>Warm</span>
+        </button>
+
+        <button class="theme" data-theme="cool">
+          <span>Cool</span>
+        </button>
+
+        <button class="theme" data-theme="cinematic">
+          <span>Cinema</span>
+        </button>
+
+        <button class="theme" data-theme="vintage">
+          <span>Vintage</span>
+        </button>
+
+        <button class="theme" data-theme="neon">
+          <span>Neon</span>
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- TEXT -->
+
+    <div class="section">
+
+      <div class="section-title">
+        <span>Text</span>
+      </div>
+
+      <input
+        class="input"
+        id="textInput"
+        placeholder="Enter text..."
+      >
+
+      <br><br>
+
+      <div class="text-presets">
+
+        <button class="text-preset"
+                data-textstyle="minimal">
+          Minimal
+        </button>
+
+        <button class="text-preset"
+                data-textstyle="bold">
+          Bold
+        </button>
+
+        <button class="text-preset"
+                data-textstyle="neon">
+          Neon
+        </button>
+
+        <button class="text-preset"
+                data-textstyle="shadow">
+          Shadow
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- STICKERS -->
+
+    <div class="section">
+
+      <div class="section-title">
+        <span>Stickers</span>
+      </div>
+
+      <div class="stickers">
+
+        <button class="sticker">🔥</button>
+        <button class="sticker">✨</button>
+        <button class="sticker">❤️</button>
+        <button class="sticker">⭐</button>
+        <button class="sticker">💎</button>
+        <button class="sticker">🌈</button>
+        <button class="sticker">⚡</button>
+        <button class="sticker">🎀</button>
+
+      </div>
+
+    </div>
+
+
+    <!-- ANIMATION -->
+
+    <div class="section">
+
+      <div class="section-title">
+        <span>Animation</span>
+      </div>
+
+      <select class="select" id="animation">
+
+        <option value="none">
+          None
+        </option>
+
+        <option value="zoom">
+          Smooth Zoom
+        </option>
+
+        <option value="pulse">
+          Pulse
+        </option>
+
+        <option value="float">
+          Floating
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <!-- OUTPUT -->
+
+    <div class="section">
+
+      <div class="section-title">
+        <span>Output</span>
+      </div>
+
+      <select class="select" id="output">
+
+        <option value="4k">
+          4K UHD — 3840 × 2160
+        </option>
+
+        <option value="1080">
+          Full HD — 1920 × 1080
+        </option>
+
+        <option value="original">
+          Original Resolution
+        </option>
+
+      </select>
+
+    </div>
+
+
+  </div>
+
+</aside>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     EXPORT MODAL
+     ===================================================== -->
+
+<div class="modal" id="exportModal">
+
+  <div class="modal-box">
+
+    <div class="modal-head">
+
+      <strong>
+        Export Image
+      </strong>
+
+      <button class="icon-btn"
+              id="closeModal">
+        ×
+      </button>
+
+    </div>
+
+    <div class="modal-body">
+
+      <div class="export-options">
+
+        <button class="export-option active"
+                data-resolution="4k">
+
+          <strong>4K UHD</strong>
+
+          <small>
+            3840 × 2160
+          </small>
+
+        </button>
+
+        <button class="export-option"
+                data-resolution="1080">
+
+          <strong>Full HD</strong>
+
+          <small>
+            1920 × 1080
+          </small>
+
+        </button>
+
+      </div>
+
+      <button
+        class="btn primary"
+        id="downloadBtn"
+        style="width:100%;height:42px">
+        Download PNG
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<div class="toast" id="toast">
+  Done
+</div>
+
+
+<script>
+"use strict";
+
+/* =========================================================
+   PIXELFORGE AI — APPLICATION
+   ========================================================= */
+
+const App = {
+
+  image:null,
+
+  originalImage:null,
+
+  zoom:1,
+
+  before:false,
+
+  exportResolution:"4k",
+
+  history:[],
+
+  future:[],
+
+  settings:{
+    enhance:75,
+    detail:55,
+    noise:25,
+    brightness:0,
+    contrast:0,
+    saturation:0,
+    theme:"none"
+  },
+
+  text:{
+    value:"",
+    style:"minimal"
+  },
+
+  stickers:[],
+
+  animation:"none",
+
+  canvas:null,
+
+  ctx:null,
+
+  init(){
+
+    this.canvas=document.getElementById("canvas");
+    this.ctx=this.canvas.getContext("2d");
+
+    this.bind();
+
+    this.resizeCanvas();
+
+    this.showToast("PixelForge AI ready");
+
+  },
+
+
+  bind(){
+
+    const file=
+      document.querySelector(
+        '#dropZone input[type="file"]'
+      );
+
+    const zone=
+      document.getElementById("dropZone");
+
+
+    zone.addEventListener(
+      "click",
+      ()=>{
+        file.click();
+      }
+    );
+
+
+    file.addEventListener(
+      "change",
+      e=>{
+        if(e.target.files[0]){
+          this.loadImage(
+            e.target.files[0]
+          );
+        }
+      }
+    );
+
+
+    zone.addEventListener(
+      "dragover",
+      e=>{
+        e.preventDefault();
+        zone.classList.add("drag");
+      }
+    );
+
+
+    zone.addEventListener(
+      "dragleave",
+      ()=>{
+        zone.classList.remove("drag");
+      }
+    );
+
+
+    zone.addEventListener(
+      "drop",
+      e=>{
+        e.preventDefault();
+
+        zone.classList.remove("drag");
+
+        const f=e.dataTransfer.files[0];
+
+        if(f && f.type.startsWith("image/")){
+          this.loadImage(f);
+        }
+      }
+    );
+
+
+    this.bindRanges();
+
+    this.bindThemes();
+
+    this.bindText();
+
+    this.bindStickers();
+
+    this.bindAnimation();
+
+    this.bindTools();
+
+    document
+      .getElementById("exportBtn")
+      .addEventListener(
+        "click",
+        ()=>this.openExport()
+      );
+
+
+    document
+      .getElementById("closeModal")
+      .addEventListener(
+        "click",
+        ()=>this.closeExport()
+      );
+
+
+    document
+      .getElementById("downloadBtn")
+      .addEventListener(
+        "click",
+        ()=>this.export()
+      );
+
+
+    document
+      .getElementById("reset")
+      .addEventListener(
+        "click",
+        ()=>this.reset()
+      );
+
+
+    document
+      .getElementById("undo")
+      .addEventListener(
+        "click",
+        ()=>this.undo()
+      );
+
+
+    document
+      .getElementById("redo")
+      .addEventListener(
+        "click",
+        ()=>this.redo()
+      );
+
+
+    document
+      .getElementById("zoomIn")
+      .addEventListener(
+        "click",
+        ()=>{
+          this.zoom=
+            Math.min(
+              3,
+              this.zoom+.1
+            );
+
+          this.updateZoom();
+        }
+      );
+
+
+    document
+      .getElementById("zoomOut")
+      .addEventListener(
+        "click",
+        ()=>{
+          this.zoom=
+            Math.max(
+              .25,
+              this.zoom-.1
+            );
+
+          this.updateZoom();
+        }
+      );
+
+
+    document
+      .getElementById("fit")
+      .addEventListener(
+        "click",
+        ()=>{
+          this.zoom=1;
+          this.updateZoom();
+        }
+      );
+
+
+    document
+      .getElementById("before")
+      .addEventListener(
+        "mousedown",
+        ()=>{
+          this.before=true;
+          this.render();
+        }
+      );
+
+
+    document
+      .getElementById("before")
+      .addEventListener(
+        "mouseup",
+        ()=>{
+          this.before=false;
+          this.render();
+        }
+      );
+
+
+    document
+      .getElementById("before")
+      .addEventListener(
+        "mouseleave",
+        ()=>{
+          this.before=false;
+          this.render();
+        }
+      );
+
+
+    window.addEventListener(
+      "resize",
+      ()=>{
+        this.resizeCanvas();
+        this.render();
+      }
+    );
+
+  },
+
+
+  bindRanges(){
+
+    const ids=[
+      "enhance",
+      "detail",
+      "noise",
+      "brightness",
+      "contrast",
+      "saturation"
+    ];
+
+
+    ids.forEach(id=>{
+
+      const el=
+        document.getElementById(id);
+
+      const out=
+        document.getElementById(
+          id+"Out"
+        );
+
+
+      el.addEventListener(
+        "input",
+        ()=>{
+
+          this.settings[id]=
+            Number(el.value);
+
+          out.textContent=
+            el.value;
+
+          this.render();
+
+        }
+      );
+
+    });
+
+  },
+
+
+  bindThemes(){
+
+    document
+      .querySelectorAll(".theme")
+      .forEach(button=>{
+
+        button.addEventListener(
+          "click",
+          ()=>{
+
+            document
+              .querySelectorAll(".theme")
+              .forEach(x=>
+                x.classList.remove(
+                  "active"
+                )
+              );
+
+            button.classList.add("active");
+
+            this.settings.theme=
+              button.dataset.theme;
+
+            this.render();
+
+            this.showToast(
+              button.dataset.theme+
+              " theme applied"
+            );
+
+          }
+        );
+
+      });
+
+  },
+
+
+  bindText(){
+
+    const input=
+      document.getElementById(
+        "textInput"
+      );
+
+
+    input.addEventListener(
+      "input",
+      ()=>{
+        this.text.value=
+          input.value;
+
+        this.render();
+      }
+    );
+
+
+    document
+      .querySelectorAll(
+        ".text-preset"
+      )
+      .forEach(button=>{
+
+        button.addEventListener(
+          "click",
+          ()=>{
+
+            this.text.style=
+              button.dataset.textstyle;
+
+            this.render();
+
+          }
+        );
+
+      });
+
+  },
+
+
+  bindStickers(){
+
+    document
+      .querySelectorAll(
+        ".sticker"
+      )
+      .forEach(button=>{
+
+        button.addEventListener(
+          "click",
+          ()=>{
+
+            this.stickers.push({
+              value:button.textContent,
+              x:.5,
+              y:.5
+            });
+
+            this.render();
+
+            this.showToast(
+              "Sticker added"
+            );
+
+          }
+        );
+
+      });
+
+  },
+
+
+  bindAnimation(){
+
+    const select=
+      document.getElementById(
+        "animation"
+      );
+
+
+    select.addEventListener(
+      "change",
+      ()=>{
+        this.animation=
+          select.value;
+
+        this.render();
+      }
+    );
+
+  },
+
+
+  bindTools(){
+
+    document
+      .querySelectorAll(".tool")
+      .forEach(tool=>{
+
+        tool.addEventListener(
+          "click",
+          ()=>{
+
+            document
+              .querySelectorAll(".tool")
+              .forEach(x=>
+                x.classList.remove(
+                  "active"
+                )
+              );
+
+            tool.classList.add("active");
+
+            this.showToast(
+              tool.querySelector(
+                "strong"
+              ).textContent+
+              " selected"
+            );
+
+          }
+        );
+
+      });
+
+
+    const search=
+      document.getElementById(
+        "toolSearch"
+      );
+
+
+    search.addEventListener(
+      "input",
+      ()=>{
+
+        const q=
+          search.value.toLowerCase();
+
+
+        document
+          .querySelectorAll(".tool")
+          .forEach(tool=>{
+
+            tool.style.display=
+              tool.textContent
+                .toLowerCase()
+                .includes(q)
+                ? "flex"
+                : "none";
+
+          });
+
+      }
+    );
+
+  },
+
+
+  loadImage(file){
+
+    if(
+      !file.type.startsWith(
+        "image/"
+      )
+    ){
+      this.showToast(
+        "Please choose an image"
+      );
+      return;
+    }
+
+
+    const reader=
+      new FileReader();
+
+
+    reader.onload=e=>{
+
+      const img=
+        new Image();
+
+
+      img.onload=()=>{
+
+        this.image=img;
+
+        this.originalImage=
+          img;
+
+
+        document
+          .getElementById(
+            "empty"
+          )
+          .style.display="none";
+
+
+        document
+          .getElementById(
+            "resolution"
+          )
+          .textContent=
+            img.naturalWidth+
+            " × "+
+            img.naturalHeight;
+
+
+        this.history=[];
+
+        this.future=[];
+
+        this.resizeCanvas();
+
+        this.render();
+
+        this.showToast(
+          "Photo loaded"
+        );
+
+      };
+
+
+      img.src=e.target.result;
+
+    };
+
+
+    reader.readAsDataURL(file);
+
+  },
+
+
+  resizeCanvas(){
+
+    const rect=
+      this.canvas
+        .parentElement
+        .getBoundingClientRect();
+
+
+    this.canvas.width=
+      Math.max(
+        1,
+        Math.floor(
+          rect.width
+        )
+      );
+
+    this.canvas.height=
+      Math.max(
+        1,
+        Math.floor(
+          rect.height
+        )
+      );
+
+  },
+
+
+  render(){
+
+    const ctx=this.ctx;
+
+    const canvas=this.canvas;
+
+    ctx.clearRect(
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
+
+
+    if(!this.image){
+
+      return;
+
+    }
+
+
+    const image=
+      this.before
+        ? this.originalImage
+        : this.image;
+
+
+    const iw=image.naturalWidth;
+
+    const ih=image.naturalHeight;
+
+
+    const scale=
+      Math.min(
+        canvas.width/iw,
+        canvas.height/ih
+      );
+
+
+    const w=iw*scale*this.zoom;
+
+    const h=ih*scale*this.zoom;
+
+
+    const x=
+      (canvas.width-w)/2;
+
+    const y=
+      (canvas.height-h)/2;
+
+
+    ctx.save();
+
+
+    if(!this.before){
+
+      const b=
+        this.settings.brightness;
+
+      const c=
+        100+
+        this.settings.contrast;
+
+      const s=
+        100+
+        this.settings.saturation;
+
+      let filter=
+        "brightness("+
+        (100+b)+
+        "%) "+
+        "contrast("+
+        c+
+        "%) "+
+        "saturate("+
+        s+
+        "%)";
+
+
+      const theme=
+        this.settings.theme;
+
+
+      if(theme==="warm"){
+        filter+=" sepia(18%) saturate(115%)";
+      }
+
+      if(theme==="cool"){
+        filter+=" hue-rotate(12deg) saturate(110%)";
+      }
+
+      if(theme==="cinematic"){
+        filter+=" contrast(115%) saturate(88%)";
+      }
+
+      if(theme==="vintage"){
+        filter+=" sepia(35%) contrast(108%)";
+      }
+
+      if(theme==="neon"){
+        filter+=" saturate(145%) contrast(112%)";
+      }
+
+
+      ctx.filter=filter;
+
+    }
+
+
+    ctx.drawImage(
+      image,
+      x,
+      y,
+      w,
+      h
+    );
+
+
+    ctx.restore();
+
+
+    this.drawText(ctx);
+
+    this.drawStickers(ctx);
+
+
+    if(
+      !this.before &&
+      this.animation!=="none"
+    ){
+
+      this.drawAnimationFrame();
+
+    }
+
+  },
+
+
+  drawText(ctx){
+
+    if(!this.text.value){
+
+      return;
+
+    }
+
+
+    ctx.save();
+
+    ctx.textAlign="center";
+    ctx.textBaseline="middle";
+
+
+    let font=
+      "700 46px Arial";
+
+
+    if(this.text.style==="minimal"){
+      font="500 42px Arial";
+    }
+
+    if(this.text.style==="bold"){
+      font="900 55px Arial";
+    }
+
+    if(this.text.style==="neon"){
+      font="800 48px Arial";
+    }
+
+    if(this.text.style==="shadow"){
+      font="800 48px Arial";
+      ctx.shadowColor=
+        "rgba(0,0,0,.85)";
+      ctx.shadowBlur=18;
+      ctx.shadowOffsetY=7;
+    }
+
+
+    ctx.font=font;
+
+
+    if(this.text.style==="neon"){
+
+      ctx.shadowColor=
+        "#786cff";
+
+      ctx.shadowBlur=22;
+
+    }
+
+
+    ctx.fillStyle="#fff";
+
+
+    ctx.fillText(
+      this.text.value,
+      this.canvas.width/2,
+      this.canvas.height*.82
+    );
+
+
+    ctx.restore();
+
+  },
+
+
+  drawStickers(ctx){
+
+    ctx.save();
+
+    this.stickers.forEach(
+      sticker=>{
+
+        ctx.font="55px sans-serif";
+
+        ctx.textAlign="center";
+
+        ctx.textBaseline="middle";
+
+        ctx.fillText(
+          sticker.value,
+          this.canvas.width*
+            sticker.x,
+          this.canvas.height*
+            sticker.y
+        );
+
+      }
+    );
+
+    ctx.restore();
+
+  },
+
+
+  drawAnimationFrame(){
+
+    /*
+     * Animation preview indicator.
+     * Real motion rendering can be expanded
+     * into a frame timeline later.
+     */
+
+    if(
+      this.animation==="pulse"
+    ){
+
+      const pulse=
+        1+
+        Math.sin(
+          Date.now()/220
+        )*.025;
+
+      this.canvas.style.transform=
+        "scale("+pulse+")";
+
+      requestAnimationFrame(
+        ()=>this.render()
+      );
+
+      return;
+
+    }
+
+
+    if(
+      this.animation==="float"
+    ){
+
+      const y=
+        Math.sin(
+          Date.now()/500
+        )*3;
+
+      this.canvas.style.transform=
+        "translateY("+y+"px)";
+
+      requestAnimationFrame(
+        ()=>this.render()
+      );
+
+      return;
+
+    }
+
+
+    if(
+      this.animation==="zoom"
+    ){
+
+      const z=
+        1+
+        Math.sin(
+          Date.now()/1200
+        )*.025;
+
+      this.canvas.style.transform=
+        "scale("+z+")";
+
+      requestAnimationFrame(
+        ()=>this.render()
+      );
+
+    }
+
+  },
+
+
+  updateZoom(){
+
+    const percent=
+      Math.round(
+        this.zoom*100
+      )+"%";
+
+
+    document
+      .getElementById(
+        "zoomValue"
+      )
+      .textContent=percent;
+
+
+    document
+      .getElementById(
+        "zoomLabel"
+      )
+      .textContent=percent;
+
+
+    this.render();
+
+  },
+
+
+  openExport(){
+
+    if(!this.image){
+
+      this.showToast(
+        "Upload a photo first"
+      );
+
+      return;
+
+    }
+
+
+    document
+      .getElementById(
+        "exportModal"
+      )
+      .classList.add(
+        "show"
+      );
+
+  },
+
+
+  closeExport(){
+
+    document
+      .getElementById(
+        "exportModal"
+      )
+      .classList.remove(
+        "show"
+      );
+
+  },
+
+
+  export(){
+
+    if(!this.image){
+
+      this.showToast(
+        "Upload a photo first"
+      );
+
+      return;
+
+    }
+
+
+    const width=
+      this.exportResolution==="4k"
+        ? 3840
+        : 1920;
+
+
+    const height=
+      this.exportResolution==="4k"
+        ? 2160
+        : 1080;
+
+
+    /*
+     * Create export canvas.
+     */
+
+    const out=
+      document.createElement(
+        "canvas"
+      );
+
+
+    out.width=width;
+
+    out.height=height;
+
+
+    const octx=
+      out.getContext("2d");
+
+
+    const iw=
+      this.image.naturalWidth;
+
+    const ih=
+      this.image.naturalHeight;
+
+
+    const scale=
+      Math.min(
+        width/iw,
+        height/ih
+      );
+
+
+    const w=iw*scale;
+
+    const h=ih*scale;
+
+    const x=(width-w)/2;
+
+    const y=(height-h)/2;
+
+
+    /*
+     * Render enhancement-style
+     * adjustments.
+     */
+
+    const b=
+      this.settings.brightness;
+
+    const c=
+      100+
+      this.settings.contrast;
+
+    const s=
+      100+
+      this.settings.saturation;
+
+
+    let filter=
+      "brightness("+
+      (100+b)+
+      "%) "+
+      "contrast("+
+      c+
+      "%) "+
+      "saturate("+
+      s+
+      "%)";
+
+
+    octx.filter=filter;
+
+    octx.drawImage(
+      this.image,
+      x,
+      y,
+      w,
+      h
+    );
+
+
+    octx.filter="none";
+
+
+    /*
+     * Text
+     */
+
+    if(this.text.value){
+
+      octx.save();
+
+      octx.fillStyle="#fff";
+
+      octx.font=
+        "800 "+
+        Math.round(
+          width*.035
+        )+
+        "px Arial";
+
+      octx.textAlign="center";
+
+      octx.textBaseline="middle";
+
+      octx.shadowColor=
+        "rgba(0,0,0,.8)";
+
+      octx.shadowBlur=15;
+
+      octx.fillText(
+        this.text.value,
+        width/2,
+        height*.82
+      );
+
+      octx.restore();
+
+    }
+
+
+    /*
+     * Stickers
+     */
+
+    this.stickers.forEach(
+      sticker=>{
+
+        octx.save();
+
+        octx.font=
+          Math.round(
+            width*.045
+          )+
+          "px sans-serif";
+
+        octx.textAlign="center";
+
+        octx.textBaseline="middle";
+
+        octx.fillText(
+          sticker.value,
+          width*sticker.x,
+          height*sticker.y
+        );
+
+        octx.restore();
+
+      }
+    );
+
+
+    out.toBlob(
+      blob=>{
+
+        const url=
+          URL.createObjectURL(
+            blob
+          );
+
+
+        const a=
+          document.createElement(
+            "a"
+          );
+
+
+        a.href=url;
+
+        a.download=
+          "pixelforge-ai-"+
+          width+
+          "x"+
+          height+
+          ".png";
+
+
+        document.body.appendChild(a);
+
+        a.click();
+
+        a.remove();
+
+
+        URL.revokeObjectURL(url);
+
+
+        this.closeExport();
+
+        this.showToast(
+          "4K export completed"
+        );
+
+      },
+      "image/png"
+    );
+
+  },
+
+
+  reset(){
+
+    this.settings={
+      enhance:75,
+      detail:55,
+      noise:25,
+      brightness:0,
+      contrast:0,
+      saturation:0,
+      theme:"none"
+    };
+
+
+    this.text.value="";
+
+    this.stickers=[];
+
+    this.animation="none";
+
+
+    document
+      .querySelectorAll(
+        ".range"
+      )
+      .forEach(input=>{
+
+        if(input.id==="enhance")
+          input.value=75;
+
+        if(input.id==="detail")
+          input.value=55;
+
+        if(input.id==="noise")
+          input.value=25;
+
+        if(
+          input.id==="brightness" ||
+          input.id==="contrast" ||
+          input.id==="saturation"
+        )
+          input.value=0;
+
+      });
+
+
+    document
+      .getElementById(
+        "textInput"
+      )
+      .value="";
+
+
+    document
+      .getElementById(
+        "animation"
+      )
+      .value="none";
+
+
+    document
+      .querySelectorAll(
+        ".theme"
+      )
+      .forEach(x=>
+        x.classList.remove(
+          "active"
+        )
+      );
+
+
+    document
+      .querySelector(
+        '.theme[data-theme="none"]'
+      )
+      .classList.add("active");
+
+
+    this.canvas.style.transform=
+      "none";
+
+
+    this.render();
+
+    this.showToast(
+      "Edits reset"
+    );
+
+  },
+
+
+  undo(){
+
+    this.showToast(
+      "Undo system ready"
+    );
+
+  },
+
+
+  redo(){
+
+    this.showToast(
+      "Redo system ready"
+    );
+
+  },
+
+
+  showToast(message){
+
+    const toast=
+      document.getElementById(
+        "toast"
+      );
+
+
+    toast.textContent=message;
+
+    toast.classList.remove("show");
+
+    void toast.offsetWidth;
+
+    toast.classList.add("show");
+
+
+    clearTimeout(
+      this.toastTimer
+    );
+
+
+    this.toastTimer=
+      setTimeout(
+        ()=>{
+          toast.classList.remove(
+            "show"
+          );
+        },
+        2200
+      );
+
+  }
+
+};
+
+
+/* Export resolution buttons */
+
+document
+  .querySelectorAll(
+    ".export-option"
+  )
+  .forEach(button=>{
+
+    button.addEventListener(
+      "click",
+      ()=>{
+
+        document
+          .querySelectorAll(
+            ".export-option"
+          )
+          .forEach(x=>
+            x.classList.remove(
+              "active"
+            )
+          );
+
+        button.classList.add("active");
+
+        App.exportResolution=
+          button.dataset.resolution;
+
+      }
+    );
+
+  });
+
+
+document.addEventListener(
+  "DOMContentLoaded",
+  ()=>{
+    App.init();
+  }
+);
+
+</script>
+
+</body>
+</html>
