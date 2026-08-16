@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta name="theme-color" content="#08090d">
-<title>PixelForge AI — Professional Photo Editor</title>
+<meta name="theme-color" content="#08090f">
+<title>PixelForge AI — Photo Editor</title>
 
 <style>
 *{
@@ -17,53 +17,32 @@
   --bg:#07080c;
   --panel:#0d1016;
   --panel2:#12161e;
-  --panel3:#181d26;
-  --line:#282e39;
+  --panel3:#181d27;
+  --border:#292f3a;
   --text:#f4f6fa;
-  --muted:#87909d;
-  --accent:#7568ff;
-  --accent2:#4e8cff;
-  --green:#35d39a;
-  --red:#ff5b76;
-  --radius:10px;
+  --muted:#8993a2;
+  --accent:#7467ff;
+  --accent2:#4d8dff;
+  --green:#32d59b;
+  --danger:#ff5570;
 }
 
-html,
-body{
+html,body{
   width:100%;
   height:100%;
   overflow:hidden;
   background:var(--bg);
   color:var(--text);
-  font-family:
-    Inter,
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
+  font-family:Inter,Arial,sans-serif;
 }
 
-button,
-input,
-select{
+button,input,select{
   font:inherit;
 }
 
 button{
   cursor:pointer;
-  border:0;
 }
-
-button:focus-visible,
-input:focus-visible,
-select:focus-visible{
-  outline:2px solid var(--accent);
-  outline-offset:2px;
-}
-
-/* ================= APP ================= */
 
 #app{
   width:100%;
@@ -72,18 +51,17 @@ select:focus-visible{
   flex-direction:column;
 }
 
-/* ================= TOP BAR ================= */
+/* TOP BAR */
 
 .topbar{
-  height:62px;
-  flex:none;
+  height:64px;
+  flex-shrink:0;
   display:flex;
   align-items:center;
   gap:18px;
   padding:0 18px;
   background:rgba(10,12,17,.96);
-  border-bottom:1px solid var(--line);
-  z-index:20;
+  border-bottom:1px solid var(--border);
 }
 
 .logo{
@@ -91,97 +69,90 @@ select:focus-visible{
   align-items:center;
   gap:9px;
   font-size:18px;
-  font-weight:850;
-  letter-spacing:-.04em;
+  font-weight:800;
   white-space:nowrap;
 }
 
-.logo-mark{
-  width:32px;
-  height:32px;
-  border-radius:9px;
+.logo-icon{
+  width:34px;
+  height:34px;
   display:grid;
   place-items:center;
-  background:linear-gradient(135deg,#786cff,#4d83ff);
-  box-shadow:0 8px 25px rgba(117,104,255,.35);
+  border-radius:10px;
+  background:linear-gradient(135deg,#7c6cff,#4d8cff);
+  box-shadow:0 8px 25px rgba(116,103,255,.3);
 }
 
 .logo span{
-  color:#8c82ff;
+  color:#8c81ff;
 }
 
 .project{
   color:var(--muted);
   font-size:12px;
-  border-left:1px solid var(--line);
+  border-left:1px solid var(--border);
   padding-left:18px;
 }
 
 .top-actions{
   margin-left:auto;
   display:flex;
-  align-items:center;
   gap:7px;
 }
 
-.btn,
-.icon-btn{
-  height:35px;
+.btn{
+  height:36px;
+  padding:0 14px;
   border-radius:8px;
-  border:1px solid var(--line);
+  border:1px solid var(--border);
   background:var(--panel3);
   color:var(--text);
-  transition:.18s ease;
-}
-
-.btn{
-  padding:0 13px;
   font-size:12px;
   font-weight:700;
 }
 
-.icon-btn{
-  width:35px;
-  display:grid;
-  place-items:center;
-}
-
-.btn:hover,
-.icon-btn:hover{
-  background:#202631;
-  border-color:#394150;
+.btn:hover{
+  background:#202632;
 }
 
 .btn.primary{
-  border-color:transparent;
   background:linear-gradient(135deg,var(--accent),var(--accent2));
-  box-shadow:0 7px 25px rgba(117,104,255,.25);
+  border:0;
 }
 
-/* ================= WORKSPACE ================= */
+.icon-btn{
+  width:36px;
+  height:36px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:var(--panel3);
+  color:white;
+}
+
+/* WORKSPACE */
 
 .workspace{
   flex:1;
   min-height:0;
   display:grid;
-  grid-template-columns:240px minmax(0,1fr) 290px;
+  grid-template-columns:245px minmax(0,1fr) 290px;
 }
 
-/* ================= SIDEBAR ================= */
+/* SIDEBARS */
 
 .sidebar{
   min-width:0;
   min-height:0;
-  overflow:hidden;
   background:var(--panel);
+  overflow:hidden;
 }
 
 .left{
-  border-right:1px solid var(--line);
+  border-right:1px solid var(--border);
 }
 
 .right{
-  border-left:1px solid var(--line);
+  border-left:1px solid var(--border);
 }
 
 .panel-title{
@@ -189,30 +160,31 @@ select:focus-visible{
   display:flex;
   align-items:center;
   padding:0 15px;
-  border-bottom:1px solid var(--line);
-  color:#cbd1da;
+  border-bottom:1px solid var(--border);
   font-size:10px;
   font-weight:800;
   letter-spacing:.12em;
+  color:#c4cad3;
 }
 
 .panel-content{
   height:calc(100% - 48px);
-  overflow:auto;
+  overflow-y:auto;
   padding:13px;
 }
 
-/* ================= TOOLS ================= */
+/* LEFT TOOLS */
 
 .search{
   width:100%;
   height:36px;
-  margin-bottom:12px;
   padding:0 11px;
   border-radius:8px;
-  border:1px solid var(--line);
+  border:1px solid var(--border);
   background:#11151c;
   color:white;
+  outline:none;
+  margin-bottom:12px;
 }
 
 .tools{
@@ -227,11 +199,11 @@ select:focus-visible{
   display:flex;
   align-items:center;
   gap:11px;
-  padding:0 11px;
-  color:#aab2be;
-  background:transparent;
-  border:1px solid transparent;
+  padding:7px 10px;
   border-radius:8px;
+  border:1px solid transparent;
+  background:transparent;
+  color:#aab2bf;
   text-align:left;
 }
 
@@ -241,13 +213,13 @@ select:focus-visible{
 }
 
 .tool.active{
-  background:rgba(117,104,255,.13);
-  border-color:rgba(117,104,255,.3);
+  background:rgba(116,103,255,.14);
+  border-color:rgba(116,103,255,.35);
   color:white;
 }
 
 .tool-icon{
-  width:25px;
+  width:27px;
   text-align:center;
   font-size:17px;
 }
@@ -258,70 +230,67 @@ select:focus-visible{
 }
 
 .tool small{
-  color:#707a88;
+  display:block;
+  color:#697383;
+  margin-top:2px;
   font-size:9px;
 }
 
-/* ================= CENTER ================= */
+/* CENTER */
 
 .center{
   min-width:0;
   min-height:0;
   display:flex;
   flex-direction:column;
-  background:#090b0f;
+  background:#080a0e;
 }
 
 .canvas-area{
   flex:1;
   min-height:0;
   position:relative;
-  overflow:hidden;
   display:flex;
   align-items:center;
   justify-content:center;
+  overflow:hidden;
   background:
     radial-gradient(
-      circle at 50% 45%,
-      #1c222c 0,
+      circle at center,
+      #1a202a 0,
       #0d1117 42%,
-      #07080c 82%
+      #07080c 80%
     );
 }
 
 .checker{
   position:absolute;
   inset:0;
-  opacity:.11;
+  opacity:.1;
   background-image:
     linear-gradient(#fff 1px,transparent 1px),
     linear-gradient(90deg,#fff 1px,transparent 1px);
-  background-size:35px 35px;
-  mask-image:
-    linear-gradient(
-      to bottom,
-      transparent,
-      #000 25%,
-      #000 75%,
-      transparent
-    );
+  background-size:36px 36px;
 }
 
 .stage{
-  width:min(86%,1000px);
-  height:min(78%,700px);
   position:relative;
+  width:min(84%,950px);
+  height:min(78%,650px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
   background:#000;
-  border:1px solid #2a303a;
+  border:1px solid #292f38;
   border-radius:5px;
   overflow:hidden;
-  box-shadow:0 30px 100px rgba(0,0,0,.65);
+  box-shadow:0 30px 90px rgba(0,0,0,.65);
 }
 
-#canvas{
-  width:100%;
-  height:100%;
+#editorCanvas{
   display:block;
+  max-width:100%;
+  max-height:100%;
 }
 
 .empty{
@@ -332,66 +301,66 @@ select:focus-visible{
   justify-content:center;
   flex-direction:column;
   gap:10px;
-  color:#788290;
   pointer-events:none;
+  color:#737e8d;
 }
 
 .empty-icon{
-  font-size:55px;
-  opacity:.65;
+  font-size:52px;
 }
 
 .empty strong{
-  color:#d9dee5;
-  font-size:14px;
+  color:#dce1e8;
+  font-size:15px;
 }
 
 .empty span{
   font-size:11px;
 }
 
-/* ================= CANVAS BAR ================= */
+/* CANVAS BUTTONS */
 
-.canvas-bar{
+.canvas-controls{
   position:absolute;
-  bottom:17px;
   left:50%;
+  bottom:18px;
   transform:translateX(-50%);
   display:flex;
   align-items:center;
-  gap:4px;
+  gap:5px;
   padding:5px;
   background:rgba(12,15,20,.9);
-  border:1px solid var(--line);
+  border:1px solid var(--border);
   border-radius:10px;
-  backdrop-filter:blur(15px);
-  z-index:10;
+  backdrop-filter:blur(14px);
+  z-index:5;
 }
 
-.canvas-bar button{
+.canvas-controls button{
   min-width:35px;
   height:31px;
+  border:0;
   border-radius:7px;
   background:transparent;
-  color:#d2d7df;
+  color:#dce2e9;
 }
 
-.canvas-bar button:hover{
+.canvas-controls button:hover{
   background:var(--panel3);
 }
 
-/* ================= BOTTOM ================= */
+/* BOTTOM */
 
-.bottom{
-  height:44px;
-  flex:none;
+.statusbar{
+  height:43px;
+  flex-shrink:0;
   display:flex;
   align-items:center;
-  padding:0 12px;
   gap:9px;
+  padding:0 13px;
   background:#0d1015;
-  border-top:1px solid var(--line);
-  color:#788290;
+  border-top:1px solid var(--border);
+  color:#7f8997;
   font-size:10px;
 }
 
@@ -400,19 +369,19 @@ select:focus-visible{
   height:7px;
   border-radius:50%;
   background:var(--green);
-  box-shadow:0 0 10px rgba(53,211,154,.6);
+  box-shadow:0 0 10px rgba(50,213,155,.6);
 }
 
-.bottom-right{
+.status-right{
   margin-left:auto;
 }
 
-/* ================= RIGHT PANEL ================= */
+/* RIGHT PANEL */
 
 .section{
   padding-bottom:17px;
   margin-bottom:17px;
-  border-bottom:1px solid rgba(255,255,255,.055);
+  border-bottom:1px solid rgba(255,255,255,.06);
 }
 
 .section:last-child{
@@ -422,8 +391,9 @@ select:focus-visible{
 .section-title{
   display:flex;
   justify-content:space-between;
+  align-items:center;
   margin-bottom:12px;
-  color:#c2c9d3;
+  color:#c2c9d2;
   font-size:10px;
   font-weight:800;
   letter-spacing:.1em;
@@ -442,36 +412,28 @@ select:focus-visible{
   display:flex;
   justify-content:space-between;
   margin-bottom:7px;
-  color:#8c95a2;
+  color:#8c96a4;
   font-size:10px;
 }
 
-.output{
-  color:#d6dce4;
+.control output{
+  color:#d8dee6;
 }
 
 .range{
   width:100%;
   height:4px;
   appearance:none;
-  background:#2a303a;
-  border-radius:5px;
+  background:#2a3039;
+  border-radius:10px;
 }
 
 .range::-webkit-slider-thumb{
   appearance:none;
-  width:13px;
-  height:13px;
+  width:14px;
+  height:14px;
   border-radius:50%;
-  background:#fff;
-  border:3px solid var(--accent);
-}
-
-.range::-moz-range-thumb{
-  width:13px;
-  height:13px;
-  border-radius:50%;
-  background:#fff;
+  background:white;
   border:3px solid var(--accent);
 }
 
@@ -479,131 +441,104 @@ select:focus-visible{
 .text-input{
   width:100%;
   height:36px;
-  padding:0 9px;
+  padding:0 10px;
   border-radius:7px;
-  border:1px solid var(--line);
+  border:1px solid var(--border);
   background:#151a21;
-  color:#edf1f5;
+  color:white;
+  outline:none;
   font-size:11px;
 }
 
-.upload{
-  width:100%;
+/* UPLOAD */
+
+.upload-box{
   min-height:145px;
+  width:100%;
   display:flex;
   align-items:center;
   justify-content:center;
   flex-direction:column;
   gap:8px;
-  border:1px dashed #424b59;
+  border:1px dashed #46505f;
   border-radius:10px;
-  background:linear-gradient(145deg,#11151c,#0d1015);
-  color:#929ba7;
+  background:linear-gradient(145deg,#11161d,#0c1015);
+  color:#8d97a5;
   cursor:pointer;
+  text-align:center;
   transition:.2s;
 }
 
-.upload:hover,
-.upload.drag{
+.upload-box:hover,
+.upload-box.drag{
   border-color:var(--accent);
-  background:rgba(117,104,255,.08);
+  background:rgba(116,103,255,.08);
 }
 
-.upload-icon{
-  font-size:32px;
+.upload-box .upload-icon{
+  font-size:30px;
 }
 
-.upload strong{
-  color:#e7ebf0;
+.upload-box strong{
+  color:#e8ecf1;
   font-size:12px;
 }
 
-.upload small{
+.upload-box small{
   font-size:9px;
 }
 
-#file{
+#photoInput{
   display:none;
 }
 
-/* ================= THEMES ================= */
+/* FILTERS */
 
-.theme-grid{
+.filter-grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:6px;
 }
 
-.theme{
-  height:52px;
-  position:relative;
-  overflow:hidden;
+.filter{
+  height:54px;
   border-radius:7px;
-  border:1px solid var(--line);
+  border:1px solid var(--border);
   color:white;
-  cursor:pointer;
-}
-
-.theme span{
-  position:absolute;
-  left:5px;
-  right:5px;
-  bottom:4px;
-  font-size:8px;
+  font-size:9px;
+  font-weight:700;
   text-shadow:0 1px 5px #000;
 }
 
-.theme:nth-child(1){
-  background:linear-gradient(135deg,#555,#171717);
+.filter[data-filter="original"]{
+  background:#444;
 }
 
-.theme:nth-child(2){
-  background:linear-gradient(135deg,#ffb36b,#7b4bff);
+.filter[data-filter="warm"]{
+  background:linear-gradient(135deg,#ffbd73,#a64d3d);
 }
 
-.theme:nth-child(3){
-  background:linear-gradient(135deg,#00c6ff,#0072ff);
+.filter[data-filter="cool"]{
+  background:linear-gradient(135deg,#54c7ff,#3550bd);
 }
 
-.theme:nth-child(4){
-  background:linear-gradient(135deg,#434343,#000);
+.filter[data-filter="cinema"]{
+  background:linear-gradient(135deg,#55432f,#1b2521);
 }
 
-.theme:nth-child(5){
-  background:linear-gradient(135deg,#ff9966,#ff5e62);
+.filter[data-filter="vintage"]{
+  background:linear-gradient(135deg,#b98652,#59432e);
 }
 
-.theme:nth-child(6){
-  background:linear-gradient(135deg,#f857a6,#ff5858);
+.filter[data-filter="neon"]{
+  background:linear-gradient(135deg,#ff32d6,#283cff);
 }
 
-.theme.active{
+.filter.active{
   border:2px solid white;
 }
 
-/* ================= TEXT ================= */
-
-.presets{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:6px;
-  margin-top:9px;
-}
-
-.preset{
-  height:39px;
-  border-radius:7px;
-  border:1px solid var(--line);
-  background:var(--panel3);
-  color:white;
-  font-size:10px;
-}
-
-.preset:hover{
-  border-color:var(--accent);
-}
-
-/* ================= STICKERS ================= */
+/* STICKERS */
 
 .stickers{
   display:grid;
@@ -612,55 +547,54 @@ select:focus-visible{
 }
 
 .sticker{
-  height:45px;
-  display:grid;
-  place-items:center;
+  height:43px;
   border-radius:7px;
+  border:1px solid var(--border);
   background:var(--panel3);
-  border:1px solid var(--line);
-  font-size:22px;
+  font-size:21px;
 }
 
 .sticker:hover{
-  transform:scale(1.05);
   border-color:var(--accent);
+  transform:scale(1.04);
 }
 
-/* ================= MODAL ================= */
+/* MODAL */
 
 .modal{
   position:fixed;
   inset:0;
   z-index:100;
   display:none;
-  place-items:center;
+  align-items:center;
+  justify-content:center;
   background:rgba(0,0,0,.75);
-  backdrop-filter:blur(8px);
+  backdrop-filter:blur(7px);
 }
 
 .modal.show{
-  display:grid;
+  display:flex;
 }
 
 .modal-box{
-  width:min(500px,92%);
+  width:min(470px,92%);
   background:#11151b;
-  border:1px solid #343b47;
-  border-radius:14px;
+  border:1px solid #353c48;
+  border-radius:13px;
   overflow:hidden;
   box-shadow:0 30px 100px rgba(0,0,0,.7);
 }
 
-.modal-head{
+.modal-header{
   height:55px;
-  padding:0 17px;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  border-bottom:1px solid var(--line);
+  padding:0 16px;
+  border-bottom:1px solid var(--border);
 }
 
-.modal-head strong{
+.modal-header strong{
   font-size:13px;
 }
 
@@ -672,48 +606,46 @@ select:focus-visible{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:8px;
-  margin-bottom:16px;
+  margin-bottom:15px;
 }
 
-.export-option{
+.export-choice{
   padding:15px;
-  text-align:left;
   border-radius:9px;
-  border:1px solid var(--line);
+  border:1px solid var(--border);
   background:var(--panel3);
   color:white;
+  text-align:left;
 }
 
-.export-option.active{
+.export-choice.active{
   border-color:var(--accent);
-  background:rgba(117,104,255,.12);
+  background:rgba(116,103,255,.12);
 }
 
-.export-option strong{
+.export-choice strong{
   display:block;
   font-size:12px;
-  margin-bottom:4px;
 }
 
-.export-option small{
+.export-choice small{
   color:var(--muted);
   font-size:9px;
 }
 
-/* ================= TOAST ================= */
+/* TOAST */
 
 .toast{
   position:fixed;
   right:20px;
-  bottom:64px;
+  bottom:62px;
   z-index:200;
   padding:11px 15px;
-  border-radius:9px;
-  border:1px solid #3a424f;
-  background:#171c23;
+  border-radius:8px;
+  background:#181d25;
+  border:1px solid #38404c;
   color:white;
   font-size:11px;
-  box-shadow:0 20px 60px rgba(0,0,0,.5);
   opacity:0;
   transform:translateY(15px);
   pointer-events:none;
@@ -725,92 +657,71 @@ select:focus-visible{
   transform:translateY(0);
 }
 
-/* ================= MOBILE ================= */
+/* RESPONSIVE */
 
 @media(max-width:1050px){
+
   .workspace{
-    grid-template-columns:210px minmax(0,1fr) 250px;
+    grid-template-columns:210px minmax(0,1fr) 260px;
+  }
+
+}
+
+@media(max-width:800px){
+
+  html,body{
+    overflow:auto;
+  }
+
+  .workspace{
+    grid-template-columns:1fr;
+    grid-template-rows:auto minmax(450px,1fr) auto;
+  }
+
+  .sidebar{
+    border:0;
+    border-bottom:1px solid var(--border);
+  }
+
+  .left{
+    max-height:220px;
+  }
+
+  .right{
+    max-height:480px;
   }
 
   .project{
     display:none;
   }
+
 }
 
-@media(max-width:800px){
+@media(max-width:500px){
 
-  html,
-  body{
-    overflow:auto;
+  .topbar{
+    padding:0 9px;
   }
 
-  .workspace{
-    display:flex;
-    flex-direction:column;
-    overflow:auto;
+  .logo{
+    font-size:14px;
   }
 
-  .sidebar{
-    flex:none;
+  .logo-icon{
+    width:29px;
+    height:29px;
   }
 
-  .left{
-    max-height:220px;
-    border-right:0;
-    border-bottom:1px solid var(--line);
-  }
-
-  .right{
-    max-height:500px;
-    border-left:0;
-    border-top:1px solid var(--line);
-  }
-
-  .center{
-    min-height:520px;
+  .top-actions .btn:not(.primary),
+  .top-actions .icon-btn{
+    display:none;
   }
 
   .stage{
     width:94%;
-    height:72%;
+    height:70%;
   }
 
-  .top-actions .btn:not(.primary){
-    display:none;
-  }
-}
-
-@media(max-width:480px){
-
-  .topbar{
-    padding:0 9px;
-    gap:8px;
-  }
-
-  .logo{
-    font-size:15px;
-  }
-
-  .logo-mark{
-    width:28px;
-    height:28px;
-  }
-
-  .top-actions{
-    gap:4px;
-  }
-
-  .icon-btn{
-    width:32px;
-  }
-
-  .btn.primary{
-    padding:0 9px;
-  }
-
-  .canvas-bar{
-    bottom:8px;
-  }
 }
 </style>
 </head>
@@ -819,12 +730,10 @@ select:focus-visible{
 
 <div id="app">
 
-<!-- ================= TOP BAR ================= -->
-
 <header class="topbar">
 
   <div class="logo">
-    <div class="logo-mark">✦</div>
+    <div class="logo-icon">✦</div>
     Pixel<span>Forge</span> AI
   </div>
 
@@ -834,13 +743,9 @@ select:focus-visible{
 
   <div class="top-actions">
 
-    <button class="icon-btn" id="undoBtn">
-      ↶
-    </button>
+    <button class="icon-btn" id="undoBtn">↶</button>
 
-    <button class="icon-btn" id="redoBtn">
-      ↷
-    </button>
+    <button class="icon-btn" id="redoBtn">↷</button>
 
     <button class="btn" id="resetBtn">
       Reset
@@ -855,12 +760,10 @@ select:focus-visible{
 </header>
 
 
-<!-- ================= WORKSPACE ================= -->
-
 <div class="workspace">
 
 
-<!-- ================= LEFT ================= -->
+<!-- LEFT -->
 
 <aside class="sidebar left">
 
@@ -871,8 +774,9 @@ select:focus-visible{
   <div class="panel-content">
 
     <input
-      class="search"
       id="toolSearch"
+      class="search"
+      type="text"
       placeholder="Search tools..."
     >
 
@@ -906,7 +810,7 @@ select:focus-visible{
         <span class="tool-icon">T</span>
         <span>
           <strong>Text</strong>
-          <small>Typography</small>
+          <small>Add typography</small>
         </span>
       </button>
 
@@ -914,7 +818,7 @@ select:focus-visible{
         <span class="tool-icon">⭐</span>
         <span>
           <strong>Stickers</strong>
-          <small>Decorations</small>
+          <small>Add decorations</small>
         </span>
       </button>
 
@@ -927,10 +831,18 @@ select:focus-visible{
       </button>
 
       <button class="tool">
+        <span class="tool-icon">⚡</span>
+        <span>
+          <strong>Animation</strong>
+          <small>Motion preview</small>
+        </span>
+      </button>
+
+      <button class="tool">
         <span class="tool-icon">⌗</span>
         <span>
           <strong>Crop</strong>
-          <small>Frame & rotate</small>
+          <small>Frame image</small>
         </span>
       </button>
 
@@ -941,7 +853,7 @@ select:focus-visible{
 </aside>
 
 
-<!-- ================= CENTER ================= -->
+<!-- CENTER -->
 
 <main class="center">
 
@@ -949,22 +861,20 @@ select:focus-visible{
 
     <div class="checker"></div>
 
-    <div class="stage">
+    <div class="stage" id="stage">
 
-      <canvas id="canvas"></canvas>
+      <canvas id="editorCanvas"></canvas>
 
-      <div class="empty" id="empty">
+      <div class="empty" id="emptyState">
 
-        <div class="empty-icon">
-          ⌁
-        </div>
+        <div class="empty-icon">⌁</div>
 
         <strong>
-          Upload a photo to start
+          Import a photo to start
         </strong>
 
         <span>
-          Drag & drop an image or use Upload Photo
+          JPG, PNG or WEBP
         </span>
 
       </div>
@@ -972,53 +882,43 @@ select:focus-visible{
     </div>
 
 
-    <div class="canvas-bar">
+    <div class="canvas-controls">
 
-      <button id="zoomOut">
-        −
-      </button>
+      <button id="zoomOut">−</button>
 
-      <button id="zoomDisplay">
+      <button id="zoomText">
         100%
       </button>
 
-      <button id="zoomIn">
-        +
-      </button>
+      <button id="zoomIn">+</button>
 
-      <button id="fitBtn">
-        ⛶
-      </button>
+      <button id="fitBtn">⛶</button>
 
-      <button id="beforeBtn">
-        ◐
-      </button>
+      <button id="beforeBtn">◐</button>
 
     </div>
 
   </div>
 
 
-  <div class="bottom">
+  <div class="statusbar">
 
     <span class="status-dot"></span>
 
-    <span id="status">
-      Ready
+    <span id="statusText">
+      Ready — Import a photo
     </span>
 
-    <span class="bottom-right">
-
-      <span id="resolution">
+    <span class="status-right">
+      <span id="resolutionText">
         No image
       </span>
 
       &nbsp;•&nbsp;
 
-      <span id="zoomLabel">
+      <span id="zoomStatus">
         100%
       </span>
-
     </span>
 
   </div>
@@ -1026,7 +926,7 @@ select:focus-visible{
 </main>
 
 
-<!-- ================= RIGHT ================= -->
+<!-- RIGHT -->
 
 <aside class="sidebar right">
 
@@ -1037,45 +937,40 @@ select:focus-visible{
   <div class="panel-content">
 
 
-    <!-- SOURCE -->
+    <!-- IMPORT -->
 
-    <section class="section">
+    <div class="section">
 
       <div class="section-title">
-        <span>Source</span>
+        <span>Photo</span>
       </div>
 
-      <label
-        class="upload"
-        id="dropZone"
-      >
+      <label class="upload-box" id="uploadBox">
 
         <input
-          id="file"
+          id="photoInput"
           type="file"
           accept="image/jpeg,image/png,image/webp"
         >
 
-        <div class="upload-icon">
-          ↥
-        </div>
+        <div class="upload-icon">↥</div>
 
         <strong>
-          Upload Photo
+          Import Photo
         </strong>
 
         <small>
-          JPG • PNG • WEBP
+          Click or drag & drop
         </small>
 
       </label>
 
-    </section>
+    </div>
 
 
     <!-- AI -->
 
-    <section class="section">
+    <div class="section">
 
       <div class="section-title">
         <span>AI Enhancement</span>
@@ -1086,7 +981,7 @@ select:focus-visible{
 
         <label>
           <span>Enhancement</span>
-          <span class="output" id="enhanceValue">75</span>
+          <output id="enhanceValue">75</output>
         </label>
 
         <input
@@ -1103,8 +998,8 @@ select:focus-visible{
       <div class="control">
 
         <label>
-          <span>Detail</span>
-          <span class="output" id="detailValue">50</span>
+          <span>Detail Recovery</span>
+          <output id="detailValue">50</output>
         </label>
 
         <input
@@ -1122,7 +1017,7 @@ select:focus-visible{
 
         <label>
           <span>Noise Reduction</span>
-          <span class="output" id="noiseValue">20</span>
+          <output id="noiseValue">20</output>
         </label>
 
         <input
@@ -1136,12 +1031,12 @@ select:focus-visible{
 
       </div>
 
-    </section>
+    </div>
 
 
     <!-- COLOR -->
 
-    <section class="section">
+    <div class="section">
 
       <div class="section-title">
         <span>Color</span>
@@ -1151,7 +1046,7 @@ select:focus-visible{
 
         <label>
           <span>Brightness</span>
-          <span class="output" id="brightnessValue">0</span>
+          <output id="brightnessValue">0</output>
         </label>
 
         <input
@@ -1169,7 +1064,7 @@ select:focus-visible{
 
         <label>
           <span>Contrast</span>
-          <span class="output" id="contrastValue">0</span>
+          <output id="contrastValue">0</output>
         </label>
 
         <input
@@ -1187,7 +1082,7 @@ select:focus-visible{
 
         <label>
           <span>Saturation</span>
-          <span class="output" id="saturationValue">0</span>
+          <output id="saturationValue">0</output>
         </label>
 
         <input
@@ -1201,69 +1096,57 @@ select:focus-visible{
 
       </div>
 
-    </section>
+    </div>
 
 
     <!-- FILTERS -->
 
-    <section class="section">
+    <div class="section">
 
       <div class="section-title">
         <span>Filters</span>
       </div>
 
-      <div class="theme-grid">
+      <div class="filter-grid">
 
-        <button
-          class="theme active"
-          data-filter="none"
-        >
-          <span>Original</span>
+        <button class="filter active"
+                data-filter="original">
+          Original
         </button>
 
-        <button
-          class="theme"
-          data-filter="warm"
-        >
-          <span>Warm</span>
+        <button class="filter"
+                data-filter="warm">
+          Warm
         </button>
 
-        <button
-          class="theme"
-          data-filter="cool"
-        >
-          <span>Cool</span>
+        <button class="filter"
+                data-filter="cool">
+          Cool
         </button>
 
-        <button
-          class="theme"
-          data-filter="cinema"
-        >
-          <span>Cinema</span>
+        <button class="filter"
+                data-filter="cinema">
+          Cinema
         </button>
 
-        <button
-          class="theme"
-          data-filter="vintage"
-        >
-          <span>Vintage</span>
+        <button class="filter"
+                data-filter="vintage">
+          Vintage
         </button>
 
-        <button
-          class="theme"
-          data-filter="neon"
-        >
-          <span>Neon</span>
+        <button class="filter"
+                data-filter="neon">
+          Neon
         </button>
 
       </div>
 
-    </section>
+    </div>
 
 
     <!-- TEXT -->
 
-    <section class="section">
+    <div class="section">
 
       <div class="section-title">
         <span>Text</span>
@@ -1272,47 +1155,39 @@ select:focus-visible{
       <input
         class="text-input"
         id="textInput"
-        placeholder="Enter text..."
+        type="text"
+        placeholder="Type something..."
+        maxlength="80"
       >
 
-      <div class="presets">
+      <br><br>
 
-        <button
-          class="preset"
-          data-style="minimal"
-        >
-          Minimal
-        </button>
+      <select class="select" id="textStyle">
 
-        <button
-          class="preset"
-          data-style="bold"
-        >
+        <option value="normal">
+          Normal
+        </option>
+
+        <option value="bold">
           Bold
-        </button>
+        </option>
 
-        <button
-          class="preset"
-          data-style="neon"
-        >
+        <option value="neon">
           Neon
-        </button>
+        </option>
 
-        <button
-          class="preset"
-          data-style="shadow"
-        >
+        <option value="shadow">
           Shadow
-        </button>
+        </option>
 
-      </div>
+      </select>
 
-    </section>
+    </div>
 
 
     <!-- STICKERS -->
 
-    <section class="section">
+    <div class="section">
 
       <div class="section-title">
         <span>Stickers</span>
@@ -1331,37 +1206,35 @@ select:focus-visible{
 
       </div>
 
-    </section>
+    </div>
 
 
     <!-- OUTPUT -->
 
-    <section class="section">
+    <div class="section">
 
       <div class="section-title">
-        <span>Export Quality</span>
+        <span>Output</span>
       </div>
 
-      <select
-        class="select"
-        id="output"
-      >
+      <select class="select" id="outputSize">
 
-        <option value="4k">
-          4K UHD — 3840 × 2160
+        <option value="original">
+          Original Resolution
         </option>
 
         <option value="1080">
           Full HD — 1920 × 1080
         </option>
 
-        <option value="original">
-          Original Resolution
+        <option value="4k">
+          4K UHD — 3840 × 2160
         </option>
 
       </select>
 
-    </section>
+    </div>
+
 
   </div>
 
@@ -1372,25 +1245,20 @@ select:focus-visible{
 </div>
 
 
-<!-- ================= EXPORT MODAL ================= -->
+<!-- EXPORT MODAL -->
 
-<div
-  class="modal"
-  id="exportModal"
->
+<div class="modal" id="exportModal">
 
   <div class="modal-box">
 
-    <div class="modal-head">
+    <div class="modal-header">
 
       <strong>
-        Export Image
+        Export Photo
       </strong>
 
-      <button
-        class="icon-btn"
-        id="closeModal"
-      >
+      <button class="icon-btn"
+              id="closeExport">
         ×
       </button>
 
@@ -1401,9 +1269,8 @@ select:focus-visible{
       <div class="export-grid">
 
         <button
-          class="export-option active"
-          data-resolution="4k"
-        >
+          class="export-choice active"
+          data-export="4k">
 
           <strong>
             4K UHD
@@ -1416,9 +1283,8 @@ select:focus-visible{
         </button>
 
         <button
-          class="export-option"
-          data-resolution="1080"
-        >
+          class="export-choice"
+          data-export="1080">
 
           <strong>
             Full HD
@@ -1435,9 +1301,10 @@ select:focus-visible{
       <button
         class="btn primary"
         id="downloadBtn"
-        style="width:100%;height:43px"
-      >
+        style="width:100%;height:43px">
+
         Download PNG
+
       </button>
 
     </div>
@@ -1447,10 +1314,7 @@ select:focus-visible{
 </div>
 
 
-<div
-  class="toast"
-  id="toast"
->
+<div class="toast" id="toast">
   Done
 </div>
 
@@ -1458,28 +1322,25 @@ select:focus-visible{
 <script>
 "use strict";
 
-/* =========================================================
-   PIXELFORGE AI ENGINE
-   ========================================================= */
-
 const App = {
 
   canvas:null,
   ctx:null,
 
   image:null,
-  original:null,
+  originalImage:null,
 
   zoom:1,
   showingBefore:false,
 
-  filter:"none",
+  exportMode:"4k",
+
+  filter:"original",
+
   text:"",
-  textStyle:"minimal",
+  textStyle:"normal",
 
   stickers:[],
-
-  exportResolution:"4k",
 
   settings:{
     enhance:75,
@@ -1492,47 +1353,51 @@ const App = {
 
   init(){
 
-    this.canvas =
-      document.getElementById("canvas");
+    this.canvas=
+      document.getElementById("editorCanvas");
 
-    this.ctx =
+    this.ctx=
       this.canvas.getContext("2d");
 
     this.bindUpload();
-    this.bindSliders();
+    this.bindControls();
     this.bindFilters();
     this.bindText();
     this.bindStickers();
     this.bindTools();
     this.bindExport();
 
-    this.resize();
+    this.resizeCanvas();
 
     window.addEventListener(
       "resize",
       ()=>{
-        this.resize();
+        this.resizeCanvas();
         this.render();
       }
     );
 
-    this.setStatus("Ready");
+    this.setStatus(
+      "Ready — Import a photo"
+    );
 
   },
 
 
-  /* ================= UPLOAD ================= */
+  /* =========================
+     PHOTO IMPORT
+     ========================= */
 
   bindUpload(){
 
-    const zone =
-      document.getElementById("dropZone");
+    const input=
+      document.getElementById("photoInput");
 
-    const input =
-      document.getElementById("file");
+    const box=
+      document.getElementById("uploadBox");
 
 
-    zone.addEventListener(
+    box.addEventListener(
       "click",
       ()=>{
         input.click();
@@ -1544,53 +1409,65 @@ const App = {
       "change",
       event=>{
 
-        const file =
+        const file=
+          event.target.files &&
           event.target.files[0];
 
         if(file){
-          this.load(file);
+          this.loadImage(file);
         }
 
       }
     );
 
 
-    zone.addEventListener(
+    box.addEventListener(
       "dragover",
       event=>{
 
         event.preventDefault();
 
-        zone.classList.add("drag");
+        box.classList.add("drag");
 
       }
     );
 
 
-    zone.addEventListener(
+    box.addEventListener(
       "dragleave",
       ()=>{
-        zone.classList.remove("drag");
+
+        box.classList.remove("drag");
+
       }
     );
 
 
-    zone.addEventListener(
+    box.addEventListener(
       "drop",
       event=>{
 
         event.preventDefault();
 
-        zone.classList.remove("drag");
+        box.classList.remove("drag");
 
-        const file =
+        const file=
+          event.dataTransfer.files &&
           event.dataTransfer.files[0];
 
         if(
           file &&
           file.type.startsWith("image/")
         ){
-          this.load(file);
+
+          this.loadImage(file);
+
+        }else{
+
+          this.toast(
+            "Please select an image"
+          );
+
         }
 
       }
@@ -1599,66 +1476,98 @@ const App = {
   },
 
 
-  load(file){
+  loadImage(file){
 
     if(
+      !file ||
       !file.type.startsWith("image/")
     ){
 
-      this.toast("Please select an image");
+      this.toast(
+        "Invalid image file"
+      );
 
       return;
-
     }
 
 
-    const reader =
+    this.setStatus(
+      "Loading photo..."
+    );
+
+
+    const reader=
       new FileReader();
 
 
-    reader.onload =
+    reader.onload=
       event=>{
 
-        const img =
+        const img=
           new Image();
 
 
-        img.onload =
-          ()=>{
+        img.onload=()=>{
 
-            this.image = img;
-            this.original = img;
+          this.image=img;
 
-            this.zoom = 1;
+          this.originalImage=img;
 
-            document
-              .getElementById("empty")
-              .style.display = "none";
+          this.zoom=1;
 
-
-            document
-              .getElementById("resolution")
-              .textContent =
-                img.naturalWidth +
-                " × " +
-                img.naturalHeight;
+          document
+            .getElementById("emptyState")
+            .style.display="none";
 
 
-            this.resize();
-
-            this.render();
-
-            this.setStatus("Photo loaded");
-
-            this.toast("Photo loaded successfully");
-
-          };
+          document
+            .getElementById("resolutionText")
+            .textContent=
+              img.naturalWidth+
+              " × "+
+              img.naturalHeight;
 
 
-        img.src =
-          event.target.result;
+          this.resizeCanvas();
+
+          this.render();
+
+          this.setStatus(
+            "Photo loaded successfully"
+          );
+
+          this.toast(
+            "Photo imported"
+          );
+
+        };
+
+
+        img.onerror=()=>{
+
+          this.toast(
+            "Could not load image"
+          );
+
+          this.setStatus(
+            "Image loading failed"
+          );
+
+        };
+
+
+        img.src=event.target.result;
 
       };
+
+
+    reader.onerror=()=>{
+
+      this.toast(
+        "Could not read file"
+      );
+
+    };
 
 
     reader.readAsDataURL(file);
@@ -1666,83 +1575,119 @@ const App = {
   },
 
 
-  /* ================= CANVAS ================= */
+  /* =========================
+     CANVAS
+     ========================= */
 
-  resize(){
+  resizeCanvas(){
 
-    const rect =
-      this.canvas
-        .parentElement
+    const rect=
+      document
+        .getElementById("stage")
         .getBoundingClientRect();
 
 
-    this.canvas.width =
+    const width=
       Math.max(
         1,
         Math.floor(rect.width)
       );
 
-    this.canvas.height =
+
+    const height=
       Math.max(
         1,
         Math.floor(rect.height)
       );
+
+
+    const dpr=
+      Math.min(
+        window.devicePixelRatio || 1,
+        2
+      );
+
+
+    this.canvas.width=
+      width*dpr;
+
+    this.canvas.height=
+      height*dpr;
+
+    this.canvas.style.width=
+      width+"px";
+
+    this.canvas.style.height=
+      height+"px";
+
+
+    this.ctx.setTransform(
+      dpr,
+      0,
+      0,
+      dpr,
+      0,
+      0
+    );
 
   },
 
 
   render(){
 
-    const ctx = this.ctx;
+    const ctx=this.ctx;
 
-    const canvas = this.canvas;
+    const width=
+      this.canvas.clientWidth;
+
+    const height=
+      this.canvas.clientHeight;
 
 
     ctx.clearRect(
       0,
       0,
-      canvas.width,
-      canvas.height
+      width,
+      height
     );
 
 
     if(!this.image){
+
       return;
+
     }
 
 
-    const image =
+    const image=
       this.showingBefore
-        ? this.original
+        ? this.originalImage
         : this.image;
 
 
-    const iw =
-      image.naturalWidth;
-
-    const ih =
-      image.naturalHeight;
+    const iw=image.naturalWidth;
+    const ih=image.naturalHeight;
 
 
-    const scale =
+    const scale=
       Math.min(
-        canvas.width / iw,
-        canvas.height / ih
+        width/iw,
+        height/ih
       );
 
 
-    const width =
-      iw * scale * this.zoom;
+    const drawWidth=
+      iw*scale*this.zoom;
 
-    const height =
-      ih * scale * this.zoom;
+    const drawHeight=
+      ih*scale*this.zoom;
 
 
-    const x =
-      (canvas.width - width) / 2;
+    const x=
+      (width-drawWidth)/2;
 
-    const y =
-      (canvas.height - height) / 2;
+    const y=
+      (height-drawHeight)/2;
 
 
     ctx.save();
@@ -1750,71 +1695,12 @@ const App = {
 
     if(!this.showingBefore){
 
-      let brightness =
-        100 + this.settings.brightness;
+      ctx.filter=
+        this.getFilter();
 
-      let contrast =
-        100 + this.settings.contrast;
+    }else{
 
-      let saturation =
-        100 + this.settings.saturation;
-
-
-      /*
-       * Enhancement simulation:
-       * Detail increases contrast slightly.
-       */
-
-      contrast +=
-        this.settings.detail * .08;
-
-      saturation +=
-        this.settings.enhance * .05;
-
-
-      let filter =
-        "brightness(" +
-        brightness +
-        "%) " +
-        "contrast(" +
-        contrast +
-        "%) " +
-        "saturate(" +
-        saturation +
-        "%)";
-
-
-      if(this.filter === "warm"){
-        filter +=
-          " sepia(15%) saturate(115%)";
-      }
-
-
-      if(this.filter === "cool"){
-        filter +=
-          " hue-rotate(12deg) saturate(110%)";
-      }
-
-
-      if(this.filter === "cinema"){
-        filter +=
-          " contrast(115%) saturate(88%)";
-      }
-
-
-      if(this.filter === "vintage"){
-        filter +=
-          " sepia(30%) contrast(105%)";
-      }
-
-
-      if(this.filter === "neon"){
-        filter +=
-          " saturate(155%) contrast(115%)";
-      }
-
-
-      ctx.filter = filter;
+      ctx.filter="none";
 
     }
 
@@ -1823,61 +1709,144 @@ const App = {
       image,
       x,
       y,
-      width,
-      height
+      drawWidth,
+      drawHeight
     );
 
 
     ctx.restore();
 
 
-    this.drawText();
-    this.drawStickers();
+    if(!this.showingBefore){
+
+      this.drawText();
+
+      this.drawStickers();
+
+    }
 
   },
 
 
-  /* ================= TEXT ================= */
+  getFilter(){
+
+    const brightness=
+      100+
+      this.settings.brightness;
+
+
+    const contrast=
+      100+
+      this.settings.contrast+
+      Math.round(
+        this.settings.enhance*.15
+      );
+
+
+    const saturation=
+      100+
+      this.settings.saturation+
+      Math.round(
+        this.settings.enhance*.1
+      );
+
+
+    let filter=
+      "brightness("+
+      brightness+
+      "%) "+
+      "contrast("+
+      contrast+
+      "%) "+
+      "saturate("+
+      saturation+
+      "%)";
+
+
+    switch(this.filter){
+
+      case "warm":
+
+        filter+=
+          " sepia(15%) saturate(120%)";
+
+        break;
+
+
+      case "cool":
+
+        filter+=
+          " hue-rotate(12deg) saturate(108%)";
+
+        break;
+
+
+      case "cinema":
+
+        filter+=
+          " contrast(115%) saturate(88%)";
+
+        break;
+
+
+      case "vintage":
+
+        filter+=
+          " sepia(32%) contrast(106%)";
+
+        break;
+
+
+      case "neon":
+
+        filter+=
+          " saturate(155%) contrast(115%)";
+
+        break;
+
+    }
+
+
+    return filter;
+
+  },
+
+
+  /* =========================
+     TEXT
+     ========================= */
 
   bindText(){
 
-    const input =
+    const input=
       document.getElementById("textInput");
+
+    const style=
+      document.getElementById("textStyle");
 
 
     input.addEventListener(
       "input",
       ()=>{
-        this.text =
-          input.value;
+
+        this.text=input.value;
 
         this.render();
+
       }
     );
 
 
-    document
-      .querySelectorAll(".preset")
-      .forEach(button=>{
+    style.addEventListener(
+      "change",
+      ()=>{
 
-        button.addEventListener(
-          "click",
-          ()=>{
+        this.textStyle=style.value;
 
-            this.textStyle =
-              button.dataset.style;
+        this.render();
 
-            this.render();
-
-            this.toast(
-              button.textContent +
-              " text style selected"
-            );
-
-          }
-        );
-
-      });
+      }
+    );
 
   },
 
@@ -1885,77 +1854,78 @@ const App = {
   drawText(){
 
     if(!this.text){
+
       return;
+
     }
 
 
-    const ctx = this.ctx;
+    const ctx=this.ctx;
+
+    const width=
+      this.canvas.clientWidth;
+
+    const height=
+      this.canvas.clientHeight;
+
 
     ctx.save();
 
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
+    ctx.textAlign="center";
+
+    ctx.textBaseline="middle";
 
 
-    let size = 44;
-    let weight = 700;
+    let size=44;
+
+    let weight="700";
 
 
-    if(this.textStyle === "minimal"){
-      size = 42;
-      weight = 500;
-    }
+    if(this.textStyle==="bold"){
 
-
-    if(this.textStyle === "bold"){
-      size = 56;
-      weight = 900;
-    }
-
-
-    if(this.textStyle === "neon"){
-
-      size = 48;
-      weight = 800;
-
-      ctx.shadowColor =
-        "#766cff";
-
-      ctx.shadowBlur = 24;
+      size=56;
+      weight="900";
 
     }
 
 
-    if(this.textStyle === "shadow"){
+    if(this.textStyle==="neon"){
 
-      size = 48;
-      weight = 800;
+      size=48;
+      weight="800";
 
-      ctx.shadowColor =
-        "rgba(0,0,0,.9)";
-
-      ctx.shadowBlur = 18;
-
-      ctx.shadowOffsetY = 7;
+      ctx.shadowColor="#7568ff";
+      ctx.shadowBlur=24;
 
     }
 
 
-    ctx.font =
-      weight +
-      " " +
-      size +
+    if(this.textStyle==="shadow"){
+
+      size=48;
+      weight="800";
+
+      ctx.shadowColor="rgba(0,0,0,.9)";
+      ctx.shadowBlur=16;
+      ctx.shadowOffsetY=7;
+
+    }
+
+
+    ctx.font=
+      weight+
+      " "+
+      size+
       "px Arial";
 
 
-    ctx.fillStyle =
-      "#ffffff";
+    ctx.fillStyle="#ffffff";
 
 
     ctx.fillText(
       this.text,
-      this.canvas.width / 2,
-      this.canvas.height * .82
+      width/2,
+      height*.82
     );
 
 
@@ -1964,7 +1934,9 @@ const App = {
   },
 
 
-  /* ================= STICKERS ================= */
+  /* =========================
+     STICKERS
+     ========================= */
 
   bindStickers(){
 
@@ -1984,7 +1956,9 @@ const App = {
 
             this.render();
 
-            this.toast("Sticker added");
+            this.toast(
+              "Sticker added"
+            );
 
           }
         );
@@ -1996,27 +1970,31 @@ const App = {
 
   drawStickers(){
 
-    const ctx = this.ctx;
+    const ctx=this.ctx;
+
+    const width=
+      this.canvas.clientWidth;
+
+    const height=
+      this.canvas.clientHeight;
+
 
     ctx.save();
+
+    ctx.font="48px sans-serif";
+
+    ctx.textAlign="center";
+
+    ctx.textBaseline="middle";
+
 
     this.stickers.forEach(
       sticker=>{
 
-        ctx.font =
-          "55px sans-serif";
-
-        ctx.textAlign =
-          "center";
-
-        ctx.textBaseline =
-          "middle";
-
-
         ctx.fillText(
           sticker.value,
-          this.canvas.width * sticker.x,
-          this.canvas.height * sticker.y
+          width*sticker.x,
+          height*sticker.y
         );
 
       }
@@ -2028,11 +2006,13 @@ const App = {
   },
 
 
-  /* ================= SLIDERS ================= */
+  /* =========================
+     SLIDERS
+     ========================= */
 
-  bindSliders(){
+  bindControls(){
 
-    const ids = [
+    const ids=[
       "enhance",
       "detail",
       "noise",
@@ -2044,12 +2024,12 @@ const App = {
 
     ids.forEach(id=>{
 
-      const input =
+      const input=
         document.getElementById(id);
 
-      const output =
+      const output=
         document.getElementById(
-          id + "Value"
+          id+"Value"
         );
 
 
@@ -2057,10 +2037,10 @@ const App = {
         "input",
         ()=>{
 
-          this.settings[id] =
+          this.settings[id]=
             Number(input.value);
 
-          output.textContent =
+          output.textContent=
             input.value;
 
           this.render();
@@ -2073,12 +2053,14 @@ const App = {
   },
 
 
-  /* ================= FILTERS ================= */
+  /* =========================
+     FILTERS
+     ========================= */
 
   bindFilters(){
 
     document
-      .querySelectorAll(".theme")
+      .querySelectorAll(".filter")
       .forEach(button=>{
 
         button.addEventListener(
@@ -2086,24 +2068,21 @@ const App = {
           ()=>{
 
             document
-              .querySelectorAll(".theme")
-              .forEach(x=>{
-                x.classList.remove("active");
-              });
+              .querySelectorAll(".filter")
+              .forEach(
+                x=>x.classList.remove("active")
+              );
 
 
             button.classList.add("active");
 
-
-            this.filter =
+            this.filter=
               button.dataset.filter;
-
 
             this.render();
 
-
             this.toast(
-              button.textContent.trim() +
+              button.textContent.trim()+
               " filter applied"
             );
 
@@ -2115,46 +2094,13 @@ const App = {
   },
 
 
-  /* ================= TOOLS ================= */
+  /* =========================
+     TOOL SEARCH
+     ========================= */
 
   bindTools(){
 
-    const tools =
-      document.querySelectorAll(".tool");
-
-
-    tools.forEach(tool=>{
-
-      tool.addEventListener(
-        "click",
-        ()=>{
-
-          tools.forEach(x=>{
-            x.classList.remove("active");
-          });
-
-
-          tool.classList.add("active");
-
-
-          const title =
-            tool.querySelector("strong");
-
-
-          if(title){
-            this.toast(
-              title.textContent +
-              " selected"
-            );
-          }
-
-        }
-      );
-
-    });
-
-
-    const search =
+    const search=
       document.getElementById(
         "toolSearch"
       );
@@ -2164,169 +2110,80 @@ const App = {
       "input",
       ()=>{
 
-        const query =
-          search.value
-            .toLowerCase()
-            .trim();
+        const query=
+          search.value.toLowerCase();
 
 
-        tools.forEach(tool=>{
+        document
+          .querySelectorAll(".tool")
+          .forEach(tool=>{
 
-          tool.style.display =
-            tool.textContent
-              .toLowerCase()
-              .includes(query)
+            const text=
+              tool.textContent.toLowerCase();
+
+
+            tool.style.display=
+              text.includes(query)
                 ? "flex"
                 : "none";
 
-        });
+          });
 
       }
     );
 
 
     document
-      .getElementById("zoomIn")
-      .addEventListener(
-        "click",
-        ()=>{
-          this.zoom =
-            Math.min(
-              3,
-              this.zoom + .1
+      .querySelectorAll(".tool")
+      .forEach(tool=>{
+
+        tool.addEventListener(
+          "click",
+          ()=>{
+
+            document
+              .querySelectorAll(".tool")
+              .forEach(
+                x=>x.classList.remove("active")
+              );
+
+
+            tool.classList.add("active");
+
+            this.toast(
+              tool.querySelector("strong")
+                .textContent+
+              " selected"
             );
 
-          this.updateZoom();
+          }
+        );
 
-        }
-      );
-
-
-    document
-      .getElementById("zoomOut")
-      .addEventListener(
-        "click",
-        ()=>{
-          this.zoom =
-            Math.max(
-              .25,
-              this.zoom - .1
-            );
-
-          this.updateZoom();
-
-        }
-      );
-
-
-    document
-      .getElementById("fitBtn")
-      .addEventListener(
-        "click",
-        ()=>{
-          this.zoom = 1;
-          this.updateZoom();
-        }
-      );
-
-
-    const before =
-      document.getElementById(
-        "beforeBtn"
-      );
-
-
-    before.addEventListener(
-      "mousedown",
-      ()=>{
-        this.showingBefore = true;
-        this.render();
-      }
-    );
-
-
-    before.addEventListener(
-      "mouseup",
-      ()=>{
-        this.showingBefore = false;
-        this.render();
-      }
-    );
-
-
-    before.addEventListener(
-      "mouseleave",
-      ()=>{
-        this.showingBefore = false;
-        this.render();
-      }
-    );
-
-
-    before.addEventListener(
-      "touchstart",
-      ()=>{
-        this.showingBefore = true;
-        this.render();
-      }
-    );
-
-
-    before.addEventListener(
-      "touchend",
-      ()=>{
-        this.showingBefore = false;
-        this.render();
-      }
-    );
-
-
-    document
-      .getElementById("resetBtn")
-      .addEventListener(
-        "click",
-        ()=>this.reset()
-      );
-
-
-    document
-      .getElementById("undoBtn")
-      .addEventListener(
-        "click",
-        ()=>{
-          this.toast("Undo ready");
-        }
-      );
-
-
-    document
-      .getElementById("redoBtn")
-      .addEventListener(
-        "click",
-        ()=>{
-          this.toast("Redo ready");
-        }
-      );
+      });
 
   },
 
 
+  /* =========================
+     ZOOM
+     ========================= */
+
   updateZoom(){
 
-    const value =
+    const percent=
       Math.round(
-        this.zoom * 100
-      ) + "%";
+        this.zoom*100
+      )+"%";
 
 
-    document
-      .getElementById("zoomDisplay")
-      .textContent = value;
+    document.getElementById(
+      "zoomText"
+    ).textContent=percent;
 
 
-    document
-      .getElementById("zoomLabel")
-      .textContent = value;
+    document.getElementById(
+      "zoomStatus"
+    ).textContent=percent;
 
 
     this.render();
@@ -2334,88 +2191,9 @@ const App = {
   },
 
 
-  /* ================= RESET ================= */
-
-  reset(){
-
-    this.settings = {
-      enhance:75,
-      detail:50,
-      noise:20,
-      brightness:0,
-      contrast:0,
-      saturation:0
-    };
-
-
-    this.filter = "none";
-
-    this.text = "";
-
-    this.textStyle = "minimal";
-
-    this.stickers = [];
-
-    this.zoom = 1;
-
-
-    const values = {
-      enhance:75,
-      detail:50,
-      noise:20,
-      brightness:0,
-      contrast:0,
-      saturation:0
-    };
-
-
-    Object.keys(values).forEach(id=>{
-
-      const input =
-        document.getElementById(id);
-
-      const output =
-        document.getElementById(
-          id + "Value"
-        );
-
-
-      input.value =
-        values[id];
-
-      output.textContent =
-        values[id];
-
-    });
-
-
-    document
-      .getElementById("textInput")
-      .value = "";
-
-
-    document
-      .querySelectorAll(".theme")
-      .forEach(x=>{
-        x.classList.remove("active");
-      });
-
-
-    document
-      .querySelector(
-        '[data-filter="none"]'
-      )
-      .classList.add("active");
-
-
-    this.updateZoom();
-
-    this.toast("Edits reset");
-
-  },
-
-
-  /* ================= EXPORT ================= */
+  /* =========================
+     EXPORT
+     ========================= */
 
   bindExport(){
 
@@ -2423,19 +2201,15 @@ const App = {
       .getElementById("exportBtn")
       .addEventListener(
         "click",
-        ()=>{
-          this.openExport();
-        }
+        ()=>this.openExport()
       );
 
 
     document
-      .getElementById("closeModal")
+      .getElementById("closeExport")
       .addEventListener(
         "click",
-        ()=>{
-          this.closeExport();
-        }
+        ()=>this.closeExport()
       );
 
 
@@ -2443,14 +2217,12 @@ const App = {
       .getElementById("downloadBtn")
       .addEventListener(
         "click",
-        ()=>{
-          this.exportImage();
-        }
+        ()=>this.download()
       );
 
 
     document
-      .querySelectorAll(".export-option")
+      .querySelectorAll(".export-choice")
       .forEach(button=>{
 
         button.addEventListener(
@@ -2459,20 +2231,17 @@ const App = {
 
             document
               .querySelectorAll(
-                ".export-option"
+                ".export-choice"
               )
-              .forEach(x=>{
-                x.classList.remove(
-                  "active"
-                );
-              });
+              .forEach(
+                x=>x.classList.remove("active")
+              );
 
 
             button.classList.add("active");
 
-
-            this.exportResolution =
-              button.dataset.resolution;
+            this.exportMode=
+              button.dataset.export;
 
           }
         );
@@ -2487,7 +2256,7 @@ const App = {
     if(!this.image){
 
       this.toast(
-        "Upload a photo first"
+        "Import a photo first"
       );
 
       return;
@@ -2511,12 +2280,12 @@ const App = {
   },
 
 
-  exportImage(){
+  download(){
 
     if(!this.image){
 
       this.toast(
-        "Upload a photo first"
+        "Import a photo first"
       );
 
       return;
@@ -2524,147 +2293,79 @@ const App = {
     }
 
 
-    const originalWidth =
-      this.image.naturalWidth;
-
-    const originalHeight =
-      this.image.naturalHeight;
+    const output=
+      document.getElementById(
+        "outputSize"
+      ).value;
 
 
     let width;
     let height;
 
 
-    if(
-      this.exportResolution ===
-      "original"
-    ){
+    if(output==="4k"){
 
-      width =
-        originalWidth;
+      width=3840;
+      height=2160;
 
-      height =
-        originalHeight;
+    }else if(output==="1080"){
 
-    }
-    else if(
-      this.exportResolution ===
-      "1080"
-    ){
+      width=1920;
+      height=1080;
 
-      width = 1920;
-      height = 1080;
+    }else{
 
-    }
-    else{
-
-      width = 3840;
-      height = 2160;
+      width=this.image.naturalWidth;
+      height=this.image.naturalHeight;
 
     }
 
 
-    const output =
+    if(output==="original"){
+
+      width=this.image.naturalWidth;
+      height=this.image.naturalHeight;
+
+    }
+
+
+    const canvas=
       document.createElement("canvas");
 
 
-    output.width = width;
-    output.height = height;
+    canvas.width=width;
+    canvas.height=height;
 
 
-    const ctx =
-      output.getContext("2d");
+    const ctx=
+      canvas.getContext("2d");
 
 
-    const iw =
+    const iw=
       this.image.naturalWidth;
 
-    const ih =
+    const ih=
       this.image.naturalHeight;
 
 
-    const scale =
+    const scale=
       Math.min(
-        width / iw,
-        height / ih
+        width/iw,
+        height/ih
       );
 
 
-    const w =
-      iw * scale;
+    const w=iw*scale;
+    const h=ih*scale;
 
-    const h =
-      ih * scale;
-
-
-    const x =
-      (width - w) / 2;
-
-    const y =
-      (height - h) / 2;
+    const x=(width-w)/2;
+    const y=(height-h)/2;
 
 
-    let brightness =
-      100 + this.settings.brightness;
+    ctx.save();
 
-    let contrast =
-      100 + this.settings.contrast;
-
-    let saturation =
-      100 + this.settings.saturation;
-
-
-    contrast +=
-      this.settings.detail * .08;
-
-    saturation +=
-      this.settings.enhance * .05;
-
-
-    let filter =
-      "brightness(" +
-      brightness +
-      "%) " +
-      "contrast(" +
-      contrast +
-      "%) " +
-      "saturate(" +
-      saturation +
-      "%)";
-
-
-    if(this.filter === "warm"){
-      filter +=
-        " sepia(15%) saturate(115%)";
-    }
-
-
-    if(this.filter === "cool"){
-      filter +=
-        " hue-rotate(12deg) saturate(110%)";
-    }
-
-
-    if(this.filter === "cinema"){
-      filter +=
-        " contrast(115%) saturate(88%)";
-    }
-
-
-    if(this.filter === "vintage"){
-      filter +=
-        " sepia(30%) contrast(105%)";
-    }
-
-
-    if(this.filter === "neon"){
-      filter +=
-        " saturate(155%) contrast(115%)";
-    }
-
-
-    ctx.filter = filter;
-
+    ctx.filter=
+      this.getFilter();
 
     ctx.drawImage(
       this.image,
@@ -2674,8 +2375,7 @@ const App = {
       h
     );
 
-
-    ctx.filter = "none";
+    ctx.restore();
 
 
     /* TEXT */
@@ -2684,71 +2384,51 @@ const App = {
 
       ctx.save();
 
-      let size =
-        Math.round(
-          width * .035
-        );
+      let fontSize=
+        Math.round(width*.035);
 
 
-      let weight = 800;
-
-
-      if(this.textStyle === "minimal"){
-        weight = 500;
+      if(this.textStyle==="bold"){
+        fontSize=
+          Math.round(width*.045);
       }
 
 
-      if(this.textStyle === "bold"){
-        size =
-          Math.round(
-            width * .045
-          );
-      }
-
-
-      ctx.font =
-        weight +
-        " " +
-        size +
+      ctx.font=
+        "800 "+
+        fontSize+
         "px Arial";
 
 
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
+      ctx.textAlign="center";
 
+      ctx.textBaseline="middle";
 
-      if(this.textStyle === "neon"){
+      if(this.textStyle==="neon"){
 
-        ctx.shadowColor =
-          "#766cff";
-
-        ctx.shadowBlur = 28;
+        ctx.shadowColor="#7568ff";
+        ctx.shadowBlur=25;
 
       }
 
+      if(this.textStyle==="shadow"){
 
-      if(this.textStyle === "shadow"){
-
-        ctx.shadowColor =
+        ctx.shadowColor=
           "rgba(0,0,0,.9)";
 
-        ctx.shadowBlur = 20;
-
-        ctx.shadowOffsetY = 8;
+        ctx.shadowBlur=18;
+        ctx.shadowOffsetY=7;
 
       }
 
 
-      ctx.fillStyle =
-        "#ffffff";
-
+      ctx.fillStyle="#fff";
 
       ctx.fillText(
         this.text,
-        width / 2,
-        height * .82
+        width/2,
+        height*.82
       );
-
 
       ctx.restore();
 
@@ -2762,25 +2442,19 @@ const App = {
 
         ctx.save();
 
-        ctx.font =
-          Math.round(
-            width * .045
-          ) +
+        ctx.font=
+          Math.round(width*.045)+
           "px sans-serif";
 
-        ctx.textAlign =
-          "center";
+        ctx.textAlign="center";
 
-        ctx.textBaseline =
-          "middle";
-
+        ctx.textBaseline="middle";
 
         ctx.fillText(
           sticker.value,
-          width * sticker.x,
-          height * sticker.y
+          width*sticker.x,
+          height*sticker.y
         );
-
 
         ctx.restore();
 
@@ -2788,7 +2462,7 @@ const App = {
     );
 
 
-    output.toBlob(
+    canvas.toBlob(
       blob=>{
 
         if(!blob){
@@ -2802,21 +2476,21 @@ const App = {
         }
 
 
-        const url =
+        const url=
           URL.createObjectURL(blob);
 
 
-        const link =
+        const link=
           document.createElement("a");
 
 
-        link.href = url;
+        link.href=url;
 
-        link.download =
-          "pixelforge-" +
-          width +
-          "x" +
-          height +
+        link.download=
+          "pixelforge-"+
+          width+
+          "x"+
+          height+
           ".png";
 
 
@@ -2828,9 +2502,7 @@ const App = {
 
 
         setTimeout(
-          ()=>{
-            URL.revokeObjectURL(url);
-          },
+          ()=>URL.revokeObjectURL(url),
           1000
         );
 
@@ -2838,7 +2510,7 @@ const App = {
         this.closeExport();
 
         this.toast(
-          "Export completed"
+          "PNG exported successfully"
         );
 
       },
@@ -2848,43 +2520,132 @@ const App = {
   },
 
 
-  /* ================= STATUS ================= */
+  /* =========================
+     BUTTONS
+     ========================= */
 
-  setStatus(text){
+  bindButtons(){
+
+  },
+
+
+  /* =========================
+     RESET
+     ========================= */
+
+  reset(){
+
+    this.settings={
+      enhance:75,
+      detail:50,
+      noise:20,
+      brightness:0,
+      contrast:0,
+      saturation:0
+    };
+
+
+    this.filter="original";
+
+    this.text="";
+
+    this.textStyle="normal";
+
+    this.stickers=[];
+
+
+    const values={
+      enhance:75,
+      detail:50,
+      noise:20,
+      brightness:0,
+      contrast:0,
+      saturation:0
+    };
+
+
+    Object.keys(values).forEach(id=>{
+
+      const input=
+        document.getElementById(id);
+
+      const output=
+        document.getElementById(
+          id+"Value"
+        );
+
+
+      input.value=values[id];
+
+      output.textContent=values[id];
+
+    });
+
+
+    document.getElementById(
+      "textInput"
+    ).value="";
+
+
+    document.getElementById(
+      "textStyle"
+    ).value="normal";
+
 
     document
-      .getElementById("status")
-      .textContent = text;
+      .querySelectorAll(".filter")
+      .forEach(
+        x=>x.classList.remove("active")
+      );
+
+
+    document
+      .querySelector(
+        '[data-filter="original"]'
+      )
+      .classList.add("active");
+
+
+    this.render();
+
+    this.toast(
+      "All edits reset"
+    );
+
+  },
+
+
+  /* =========================
+     STATUS
+     ========================= */
+
+  setStatus(message){
+
+    document.getElementById(
+      "statusText"
+    ).textContent=message;
 
   },
 
 
   toast(message){
 
-    const toast =
-      document.getElementById(
-        "toast"
-      );
+    const toast=
+      document.getElementById("toast");
 
 
-    toast.textContent =
-      message;
-
+    toast.textContent=message;
 
     toast.classList.add("show");
 
 
-    clearTimeout(
-      this.toastTimer
-    );
+    clearTimeout(this.toastTimer);
 
 
-    this.toastTimer =
+    this.toastTimer=
       setTimeout(
         ()=>{
-          toast.classList.remove(
-            "show"
-          );
+          toast.classList.remove("show");
         },
         2200
       );
@@ -2894,32 +2655,137 @@ const App = {
 };
 
 
-/* ================= START ================= */
+/* =========================
+   GLOBAL BUTTON EVENTS
+   ========================= */
+
+document
+  .getElementById("zoomIn")
+  .addEventListener(
+    "click",
+    ()=>{
+
+      App.zoom=
+        Math.min(
+          3,
+          App.zoom+.1
+        );
+
+      App.updateZoom();
+
+    }
+  );
+
+
+document
+  .getElementById("zoomOut")
+  .addEventListener(
+    "click",
+    ()=>{
+
+      App.zoom=
+        Math.max(
+          .25,
+          App.zoom-.1
+        );
+
+      App.updateZoom();
+
+    }
+  );
+
+
+document
+  .getElementById("fitBtn")
+  .addEventListener(
+    "click",
+    ()=>{
+
+      App.zoom=1;
+
+      App.updateZoom();
+
+    }
+  );
+
+
+document
+  .getElementById("beforeBtn")
+  .addEventListener(
+    "mousedown",
+    ()=>{
+
+      App.showingBefore=true;
+
+      App.render();
+
+    }
+  );
+
+
+document
+  .getElementById("beforeBtn")
+  .addEventListener(
+    "mouseup",
+    ()=>{
+
+      App.showingBefore=false;
+
+      App.render();
+
+    }
+  );
+
+
+document
+  .getElementById("beforeBtn")
+  .addEventListener(
+    "mouseleave",
+    ()=>{
+
+      App.showingBefore=false;
+
+      App.render();
+
+    }
+  );
+
+
+document
+  .getElementById("resetBtn")
+  .addEventListener(
+    "click",
+    ()=>App.reset()
+  );
+
+
+/* Prevent modal closing accidentally
+   while clicking inside the box */
+
+document
+  .getElementById("exportModal")
+  .addEventListener(
+    "click",
+    event=>{
+
+      if(
+        event.target.id==="exportModal"
+      ){
+
+        App.closeExport();
+
+      }
+
+    }
+  );
+
+
+/* START */
 
 document.addEventListener(
   "DOMContentLoaded",
   ()=>{
     App.init();
-  }
-);
-
-
-/* ================= ESCAPE ================= */
-
-document.addEventListener(
-  "keydown",
-  event=>{
-
-    if(event.key === "Escape"){
-
-      document
-        .getElementById(
-          "exportModal"
-        )
-        .classList.remove("show");
-
-    }
-
   }
 );
 
